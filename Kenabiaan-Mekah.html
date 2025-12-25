@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Kenabian-Mekah — Sejarah Peradaban Islam</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --gold: #d4af37;
+    --green-dark: #063a2f;
+    --green-deep: #031b14;
+    --green-mid: #0b6b4b;
+    --text: #e0e0e0;
+    --card-bg: rgba(6, 58, 47, 0.45);
+    --border: rgba(212, 175, 55, 0.15);
+    --radius: 16px;
+}
+
+/* Reset & Basic */
+*{box-sizing:border-box}
+html{scroll-behavior: smooth;}
+body{
+    margin:0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, var(--green-dark) 0%, var(--green-deep) 100%);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: "Cinzel", serif; color: var(--gold); margin-top: 0; }
+p { margin-bottom: 1.2em; }
+ul { margin-bottom: 1.2em; padding-left: 20px; }
+li { margin-bottom: 8px; }
+strong { color: #fff; }
+
+/* --- NAVBAR STYLES --- */
+nav{
+    position:fixed; left:0; right:0; top:0; height:70px;
+    display:flex; 
+    align-items:center; 
+    justify-content: space-between; 
+    padding:0 30px; 
+    background: rgba(3, 27, 20, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+nav h1{ margin:0; font-size: 18px; letter-spacing: 1px; }
+
+/* Hamburger Menu Icon (Hidden on Desktop) */
+.nav-toggle {
+    display: none; /* Default hidden di desktop */
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 101;
+}
+.nav-toggle span {
+    width: 25px; height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+/* Animasi Hamburger menjadi X */
+.nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+.nav-links-container {
+    display: flex;
+    gap: 30px; 
+    align-items: center;
+}
+
+.nav-links{ 
+    display:flex; 
+    gap: 20px; 
+    align-items: center;
+}
+
+.nav-links a{
+    color: var(--text); 
+    text-decoration:none; 
+    font-size: 14px;
+    transition: color 0.3s;
+    padding: 5px 0; 
+    position: relative;
+    white-space: nowrap; 
+}
+.nav-links a:hover{ color: var(--gold); }
+
+/* Dekorasi Utility Links */
+.nav-utility a {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Cinzel', serif;
+}
+.nav-utility a:hover { color: var(--gold); }
+.nav-utility a::after {
+    content: '';
+    position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px;
+    background-color: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s ease;
+}
+.nav-utility a:hover::after { transform: scaleX(1); }
+
+/* --- RESPONSIVE NAVBAR (Mobile Logic - Tampilan Grid Unik) --- */
+@media (max-width: 960px) {
+    nav { padding: 0 20px; }
+  
+    /* Tampilkan tombol hamburger */
+    .nav-toggle { display: flex; } 
+
+    .nav-links-container {
+        position: fixed;
+        top: 70px; left: 0; right: 0;
+        /* Scroll logic jika layar sangat pendek */
+        max-height: calc(100vh - 70px); 
+        overflow-y: auto; 
+      
+        background: rgba(3, 27, 20, 0.98);
+        border-bottom: 1px solid var(--border);
+      
+        flex-direction: column;
+        align-items: stretch; /* Agar lebar penuh */
+        padding: 20px;
+        gap: 25px;
+      
+        transform: translateY(-150%); /* Sembunyi ke atas */
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Class active ditambahkan via JS untuk memunculkan menu */
+    .nav-links-container.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-links { display: flex; }
+
+    /* UTILITY LINKS (Home, Timeline, Peta) */
+    .nav-utility { 
+        order: 1; 
+        display: flex;
+        flex-direction: row; 
+        justify-content: center;
+        gap: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    /* CONTENT LINKS (Bab 1-6) - JADI GRID 2 KOLOM */
+    .nav-content { 
+        order: 2; 
+        display: grid !important; /* Force grid */
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px;
+        width: 100%;
+    }
+
+    /* Styling Tombol Grid */
+    .nav-content a {
+        font-size: 0.9rem;
+        text-align: center;
+        padding: 12px 5px;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        background: rgba(255,255,255,0.03);
+        transition: all 0.2s ease;
+        white-space: normal;
+        line-height: 1.3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nav-content a:active, .nav-content a:hover {
+        background: rgba(212, 175, 55, 0.15);
+        border-color: var(--gold);
+        color: var(--gold);
+        transform: scale(0.98);
+    }
+    
+    .nav-utility a { font-size: 1rem; padding: 5px; }
+}
+
+/* HERO HEADER */
+.page-header{
+    padding: 140px 20px 60px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+.page-header h2{ font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.page-header p{ font-size: 1.1rem; opacity: 0.9; }
+
+/* LAYOUT SECTIONS */
+.section{
+    padding: 80px 24px;
+    position: relative;
+    overflow: hidden; 
+}
+.section-inner{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 50px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+/* DIVIDER STYLE */
+.divider {
+    width: 60%; max-width: 800px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+    margin: 0 auto; opacity: 0.5; position: relative;
+}
+.divider::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); width: 10px; height: 10px;
+    background-color: var(--gold); border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold);
+}
+
+/* TEXT CARD STYLE */
+.text-content{ flex: 1 1 500px; }
+.text-card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    position: relative;
+    backdrop-filter: blur(5px);
+}
+.text-card::before {
+    content: ''; position: absolute; top:0; left:0; right:0; height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+}
+
+.sub-section { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+.sub-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.sub-section h4 { color: #fff; font-size: 1.2rem; margin-bottom: 12px; border-left: 3px solid var(--gold); padding-left: 12px; }
+
+/* IMAGE BOX */
+.img-box{ flex: 0 0 400px; position: sticky; top: 100px; }
+.img-frame{
+    width: 100%; border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5); border: 1px solid var(--border);
+    background: #000;
+    margin-bottom: 15px;
+}
+.img-frame img{
+    width: 100%; height: auto; display: block;
+    opacity: 0.8; transition: opacity 0.5s;
+}
+.img-caption {
+    font-size: 0.85rem; color: rgba(255,255,255,0.5); 
+    margin-top: 5px; margin-bottom: 20px; text-align: center; font-style: italic;
+}
+
+/* ALTERNATING LAYOUT */
+.row { display: flex; gap: 50px; width: 100%; }
+.row.rev { flex-direction: row-reverse; }
+
+/* RESPONSIVE LAYOUT CONTENT */
+@media (max-width: 960px){
+    .row, .row.rev { flex-direction: column; }
+    .img-box { flex: auto; width: 100%; position: static; margin-bottom: 40px; }
+    .text-content { order: 2; width: 100%; flex: auto; }
+    .img-box { order: 1; }
+    .text-card { padding: 25px; }
+}
+
+/* ANIMATIONS */
+.reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+    <h1>Sejarah Peradaban Islam</h1>
+    
+    <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="nav-links-container" id="navLinks">
+        <div class="nav-links nav-utility">
+            <a href="index.html#home">Home</a>
+            <a href="timeline.html">Timeline</a>
+            <a href="index.html#peta">Peta</a>
+        </div>
+    
+        <div class="nav-links nav-content">
+            <a href="#section-1">1. Wahyu</a>
+            <a href="#section-2">2. Dakwah</a>
+            <a href="#section-3">3. Boikot</a>
+            <a href="#section-4">4. Habasyah</a>
+            <a href="#section-5">5. Aamul Huzni</a>
+            <a href="#section-6">6. Isra' Mi'raj</a>
+        </div>
+    </div>
+</nav>
+
+<header id="home" class="page-header reveal">
+    <p style="color:var(--gold); font-weight:600; letter-spacing:2px; margin-bottom:10px;">BAGIAN B</p>
+    <h2>Periode Mekah (610 – 622 M)</h2>
+    <p>Sebuah era 13 tahun yang ditandai dengan perjuangan spiritual, tekanan sosial yang ekstrem, dan pembentukan karakter komunitas Muslim awal di tengah hegemoni Quraisy.</p>
+</header>
+
+<section id="section-1" class="section">
+    <div class="section-inner row">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>1. Proses Turunnya Wahyu Pertama</h3>
+                
+                <div class="sub-section">
+                    <h4>A. Konteks Pra-Kenabian: Tahannuts</h4>
+                    <p>Menjelang usia 40 tahun, Muhammad ﷺ mengalami kegelisahan spiritual melihat realitas moral masyarakat Mekah yang rusak (Jahiliyyah). Beliau melakukan <em>uzlah</em> (mengasingkan diri) di Gua Hira, Jabal Nur, sekitar 2 mil dari Mekah. Selama fase ini, beliau kerap membawa bekal untuk beribadah selama beberapa malam, merenung mencari <em>Al-Haqq</em> (Kebenaran Mutlak) sesuai ajaran Ibrahim AS, serta mengalami mimpi-mimpi yang nyata (<em>Ar-Ru'ya Ash-Shadiqah</em>) bagaikan terangnya waktu subuh.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Peristiwa Agung: 17 Ramadhan, 610 M</h4>
+                    <p>Momen bersejarah terjadi di malam Lailatul Qadar. Malaikat Jibril hadir dalam wujud aslinya memenuhi ufuk, lalu mendekap Nabi hingga beliau merasa sesak dan kepayahan. Terjadi dialog monumental:</p>
+                    <ul>
+                        <li>Jibril: <em>"Iqra'!"</em> (Bacalah!)</li>
+                        <li>Nabi: <em>"Ma ana bi qari"</em> (Aku tidak bisa membaca).</li>
+                    </ul>
+                    <p>Hal ini berulang tiga kali hingga Jibril mendekapnya kuat-kuat dan mewahyukan lima ayat pertama <strong>Surah Al-'Alaq</strong>. Ini menandai pelantikan Muhammad ﷺ sebagai Nabi akhir zaman.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Guncangan Jiwa & Validasi Waraqah</h4>
+                    <p>Nabi pulang dalam kondisi tubuh menggigil hebat dan meminta Khadijah RA: <em>"Zammiluni! Zammiluni!"</em> (Selimuti aku!). Setelah tenang, Khadijah membawanya menemui <strong>Waraqah bin Naufal</strong>, pendeta Nasrani yang menguasai kitab Ibrani. Waraqah memvalidasi peristiwa tersebut: <em>"Ini adalah Namus (Jibril) yang sama yang pernah turun kepada Musa. Seandainya aku masih muda saat kaummu mengusirmu nanti."</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                 <img src="d45ca01a-3bde-4805-9b9f-5bfc116e4c10_169.jpeg" alt="Interior Gua Hira memandang ke arah Mekah">
+            </div>
+            <div class="img-caption">Pemandangan dari dalam Gua Hira, saksi bisu pertemuan langit dan bumi melalui Jibril dan Muhammad.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-2" class="section">
+    <div class="section-inner row rev">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>2. Strategi & Eskalasi Dakwah</h3>
+
+                <div class="sub-section">
+                    <h4>A. Dakwah Sirriyah (Fase Rahasia - 3 Tahun)</h4>
+                    <p>Menyadari risiko penolakan frontal, Nabi memulai dakwah secara personal dan tersembunyi. Pusat kaderisasi adalah rumah <strong>Al-Arqam bin Abi Al-Arqam</strong> di bukit Safa. Fokus utamanya adalah pembinaan akidah dan tauhid.</p>
+                    <p>Golongan pertama yang masuk Islam (<em>Assabiqunal Awwalun</em>) meliputi:</p>
+                    <ul>
+                        <li>Wanita: Khadijah binti Khuwailid.</li>
+                        <li>Laki-laki dewasa: Abu Bakar Ash-Shiddiq.</li>
+                        <li>Anak-anak: Ali bin Abi Thalib.</li>
+                        <li>Budak/Mawla: Zaid bin Haritsah.</li>
+                    </ul>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Dakwah Jahriyyah (Proklamasi Terbuka)</h4>
+                    <p>Pasca turunnya QS. Al-Hijr: 94, Nabi menaiki Bukit Safa dan memanggil seluruh klan Quraisy. Beliau bertanya tentang kejujurannya, yang diamini oleh massa, namun saat beliau menyeru pada Tauhid, paman beliau, <strong>Abu Lahab</strong>, berteriak: <em>"Tabban laka!"</em> (Celakalah engkau!), yang memicu turunnya Surah Al-Lahab.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Persekusi & Penyiksaan Fisik</h4>
+                    <p>Quraisy merespons dengan kekerasan sistematis, terutama kepada golongan lemah (budak):</p>
+                    <ul>
+                        <li><strong>Bilal bin Rabah:</strong> Dijemur di padang pasir dengan batu panas di dada.</li>
+                        <li><strong>Keluarga Yasir:</strong> Ammar bin Yasir disiksa di depan Nabi, sementara ibunya, <strong>Sumayyah</strong>, menjadi syahidah pertama dalam Islam setelah ditikam oleh Abu Jahl.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="005897500-1610557797-Bukit-Shafajpg.jpg" alt="Ilustrasi Bukit Safa kuno">
+            </div>
+            <div class="img-caption">Bukit Safa, tempat Nabi secara terbuka menantang hegemoni keberhalaan Quraisy untuk pertama kalinya.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-3" class="section">
+    <div class="section-inner row">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>3. Embargo Ekonomi & Sosial (Boikot)</h3>
+
+                <div class="sub-section">
+                    <h4>A. Piagam Ketidakadilan (7 Kenabian)</h4>
+                    <p>Karena gagal membunuh Nabi yang dilindungi oleh Bani Hasyim dan Bani Muthalib, para petinggi Quraisy (Abu Jahl, Abu Sufyan, dll) menyepakati blokade total. Mereka menulis <em>Sahifah</em> (piagam) yang digantung di dinding Ka'bah. Isinya melarang:</p>
+                    <ul>
+                        <li>Menikah dengan anggota Bani Hasyim.</li>
+                        <li>Melakukan transaksi jual beli makanan/barang.</li>
+                        <li>Berbicara atau berdamai sampai Muhammad diserahkan untuk dieksekusi.</li>
+                    </ul>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Penderitaan di Syi'b Abi Thalib</h4>
+                    <p>Seluruh klan Bani Hasyim (Muslim maupun kafir, kecuali Abu Lahab) terkurung di celah bukit (<em>Syi'b</em>) selama 3 tahun. Jalur makanan diputus total. Jerit tangis bayi yang kelaparan terdengar hingga ke Mekah, sementara mereka terpaksa memakan dedaunan kering dan kulit hewan untuk bertahan hidup.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Berakhirnya Boikot</h4>
+                    <p>Boikot berakhir karena dua faktor: Gerakan hati nurani dari tokoh Quraisy moderat (seperti Hisyam bin Amr dan Muth'im bin Adi) yang merobek kesepakatan, serta mukjizat di mana rayap memakan seluruh naskah Sahifah kecuali tulisan <strong>"Bismikallahumma"</strong> (Dengan nama-Mu Ya Allah).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="61af6ed72a2e0.jpg" alt="Ilustrasi Naskah Sahifah">
+            </div>
+            <div class="img-caption">Bentuk pemboikotan Kaum Quraisy terhadap Bani Hasyim.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-4" class="section">
+    <div class="section-inner row rev">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>4. Hijrah ke Habasyah (Abyssinia)</h3>
+                
+                <div class="sub-section">
+                    <h4>A. Dua Gelombang Migrasi</h4>
+                    <p>Demi menyelamatkan iman dari fitnah fisik, Nabi memerintahkan sahabat menyeberangi Laut Merah menuju Afrika. </p>
+                    <ul>
+                        <li><strong>Gelombang I (Rajab, 5 H):</strong> Terdiri dari 12 pria dan 4 wanita (termasuk Utsman bin Affan dan Ruqayyah).</li>
+                        <li><strong>Gelombang II:</strong> Lebih besar, membawa sekitar 83 pria dan 18 wanita, dipimpin oleh Ja'far bin Abi Thalib.</li>
+                    </ul>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Diplomasi & Sidang di Istana Najasyi</h4>
+                    <p>Quraisy mengirim delegasi cerdik, Amr bin Al-Ash, membawa hadiah mewah untuk Raja Najasyi (Ashama ibn Abjar) agar memulangkan para "pemberontak". Di hadapan Raja dan para uskup, <strong>Ja'far bin Abi Thalib</strong> berpidato memukau tentang ajaran Islam yang memuliakan manusia dan membacakan awal <strong>Surah Maryam</strong>.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Perlindungan Raja Kristen</h4>
+                    <p>Mendengar ayat Al-Quran tentang Maryam dan Isa AS, Raja Najasyi menangis hingga membasahi janggutnya. Ia membuat garis di tanah dengan tongkatnya dan berkata: <em>"Perbedaan antara agama kami dan kalian tidak lebih tebal dari garis ini."</em> Najasyi menolak suap Quraisy dan memberikan jaminan keamanan penuh bagi Muslim.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="peta_hijrahhabasyah1.gif" alt="Peta Hijrah ke Habasyah">
+            </div>
+            <div class="img-caption">Rute maritim melintasi Laut Merah menuju Aksum (Habasyah), menjadi suaka politik pertama dalam sejarah Islam.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-5" class="section">
+    <div class="section-inner row">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>5. Aamul Huzni (Tahun Kesedihan)</h3>
+                
+                <div class="sub-section">
+                    <h4>A. Runtuhnya Benteng Perlindungan (10 Kenabian)</h4>
+                    <p>Ujian terberat Nabi terjadi secara beruntun. <strong>Abu Thalib</strong> wafat, yang berarti hilangnya perlindungan politik dan kekebalan hukum klan terhadap Nabi. Tak lama berselang, <strong>Khadijah binti Khuwailid</strong>, istri tercinta sekaligus penyokong finansial dan psikologis utama, juga wafat. Nabi menyebut tahun ini sebagai <em>Aamul Huzni</em> karena dalamnya duka yang beliau rasakan.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Insiden Berdarah di Thaif</h4>
+                    <p>Mencari basis dakwah baru, Nabi berjalan kaki menuju Thaif (kota Bani Tsaqif). Namun, bukan sambutan yang didapat, melainkan penghinaan. Para pemimpin Thaif mengerahkan budak dan anak-anak untuk melempari Nabi dengan batu sepanjang 3 mil hingga sandal beliau basah oleh darah.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Doa Malaikat Gunung & Addas</h4>
+                    <p>Saat berlindung di kebun anggur, Malaikat Jibril dan Malaikat Penjaga Gunung menawarkan untuk menimpakan dua gunung (Al-Akhsyabain) kepada penduduk Thaif. Namun, Nabi menolak dengan doa rahmat: <em>"Jangan, aku berharap Allah akan mengeluarkan dari tulang rusuk mereka keturunan yang menyembah Allah."</em> Di momen ini pula, seorang budak Kristen bernama <strong>Addas</strong> masuk Islam setelah melihat akhlak Nabi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="Jannat-Al-Mualla-1024x682.jpg" alt="Makam Khadijah di Jannat al-Mualla">
+            </div>
+            <div class="img-caption">Jannat al-Mualla, tempat peristirahatan terakhir Khadijah RA, wanita pertama yang beriman.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-6" class="section">
+    <div class="section-inner row rev">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>6. Isra’ & Mi’raj: Perjalanan Agung</h3>
+                
+                <div class="sub-section">
+                    <h4>A. Isra' (Mekah ke Palestina)</h4>
+                    <p>Sebagai hiburan (tasliyah) dari Allah pasca Aamul Huzni, Nabi diperjalankan di malam hari dari Masjidil Haram ke Masjidil Aqsa menunggangi <strong>Buraq</strong>. Di Baitul Maqdis, Nabi memimpin shalat berjamaah yang diikuti oleh roh para Nabi terdahulu, menegaskan posisi beliau sebagai <em>Imamul Anbiya</em> (Pemimpin para Nabi).</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Mi'raj (Menembus 7 Langit)</h4>
+                    <p>Nabi diangkat (Mi'raj) menembus tujuh lapis langit. Di setiap tingkatan, beliau disambut oleh Nabi-Nabi besar seperti Adam, Isa, Yusuf, Idris, Harun, Musa, hingga Ibrahim AS di langit ke-7. Perjalanan berlanjut hingga <em>Sidratul Muntaha</em> (tempat tertinggi yang tak terjangkau makhluk lain termasuk Jibril).</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Perintah Shalat 5 Waktu</h4>
+                    <p>Di hadapan Allah SWT tanpa perantara, Nabi menerima perintah shalat wajib. Awalnya diperintahkan 50 waktu sehari semalam. Namun, atas saran Nabi Musa AS dan permohonan keringanan (dispensasi) berulang kali dari Nabi Muhammad ﷺ, kewajiban tersebut ditetapkan menjadi <strong>5 waktu</strong> dengan pahala setara 50 waktu. Peristiwa ini menjadi tonggak ibadah vertikal umat Islam.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="islamedia.co masjid al-aqsa.jpg" alt="Masjidil Aqsa Malam Hari">
+            </div>
+            <div class="img-caption">Masjidil Aqsa, kiblat pertama umat Islam dan titik transit perjalanan samawi.</div>
+            <br>
+            <div class="img-frame">
+                <img src="Miraj_by_Sultan_Muhammad.jpg" alt="Seni Kaligrafi Buraq">
+            </div>
+              <div class="img-caption">Ilustrasi Isra’ Mi’raj. Perjalanan menembus Ruang dan Waktu</div>
+        </div>
+    </div>
+</section>
+
+<section class="section" style="text-align:center; padding-bottom: 100px;">
+    <div class="section-inner" style="justify-content:center;">
+        <div class="text-card reveal" style="max-width:800px; border-color: var(--gold);">
+            <h3 style="margin-bottom:20px;">Epilog: Menuju Era Baru</h3>
+            <p style="font-size:1.1rem; text-align: center;">
+                Pasca Isra Mi'raj, dakwah memasuki fase kritis. Bai'at Aqabah I dan II membuka cakrawala baru di kota Yatsrib (Madinah). Setelah 13 tahun perjuangan di Mekah yang penuh darah dan air mata, perintah Hijrah akhirnya turun. Islam bersiap meninggalkan tanah kelahirannya untuk membangun peradaban negara di Madinah.
+            </p>
+            <div style="margin-top:30px; font-family:'Cinzel', serif; color:var(--gold);">
+                — Bersambung ke Periode Madinah —
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; Sejarah Peradaban Islam - Arsip Digital</p>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- 1. LOGIKA MENU MOBILE (HAMBURGER) ---
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    // Debugging: Cek apakah elemen ditemukan
+    console.log("NavToggle:", navToggle);
+    console.log("NavLinks:", navLinks);
+
+    if(navToggle && navLinks) {
+        // Toggle menu saat icon hamburger diklik
+        navToggle.addEventListener('click', function(){
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+        
+        // Tutup menu otomatis saat salah satu link diklik
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(){
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Tutup menu jika klik di luar area menu
+        document.addEventListener('click', function(event){
+            // Cek apakah yang diklik BUKAN container menu DAN BUKAN tombol toggle
+            if (!navLinks.contains(event.target) && !navToggle.contains(event.target) && navLinks.classList.contains('active')) {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+    } else {
+        console.error("Elemen Navigasi tidak ditemukan! Pastikan ID 'navToggle' dan 'navLinks' ada di HTML.");
+    }
+
+    // --- 2. INTERSECTION OBSERVER FOR ANIMATION ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
+    
+    // --- 3. SMOOTH SCROLL ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if(href.startsWith('#') && href.length > 1) {
+                const targetEl = document.querySelector(href);
+                if(targetEl) {
+                    e.preventDefault();
+                    const headerOffset = 80;
+                    const elementPosition = targetEl.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

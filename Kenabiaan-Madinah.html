@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pra-Kenabian — Sejarah Peradaban Islam</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --gold: #d4af37;
+    --green-dark: #063a2f;
+    --green-deep: #031b14;
+    --green-mid: #0b6b4b;
+    --text: #e0e0e0;
+    --card-bg: rgba(6, 58, 47, 0.45);
+    --border: rgba(212, 175, 55, 0.15);
+    --radius: 16px;
+}
+
+/* Reset & Basic */
+*{box-sizing:border-box}
+html{scroll-behavior: smooth;}
+body{
+    margin:0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, var(--green-dark) 0%, var(--green-deep) 100%);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: "Cinzel", serif; color: var(--gold); margin-top: 0; }
+/* Fluid Typography */
+h2 { font-size: clamp(2rem, 5vw, 3rem); } 
+h3 { font-size: clamp(1.4rem, 4vw, 2rem); }
+h4 { color: #fff; font-size: 1.2rem; margin-bottom: 12px; border-left: 3px solid var(--gold); padding-left: 12px; }
+p { margin-bottom: 1.2em; }
+ul { margin-bottom: 1.2em; padding-left: 20px; }
+li { margin-bottom: 8px; }
+
+/* --- NAVBAR STYLES --- */
+nav {
+    position:fixed; left:0; right:0; top:0;
+    display:flex; 
+    align-items:center; 
+    justify-content: space-between; 
+    padding: 0 30px;
+    background: rgba(3, 27, 20, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    transition: all 0.3s ease;
+    height: 70px;
+}
+nav h1{ margin:0; font-size: 1.125rem; letter-spacing: 1px; }
+
+/* Hamburger Menu Icon (Hidden on Desktop) */
+.nav-toggle {
+    display: none; /* Default hidden */
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+}
+.nav-toggle span {
+    width: 25px; height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+/* Animasi Hamburger menjadi X */
+.nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+.nav-links-container {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-links { 
+    display:flex; 
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text); 
+    text-decoration:none; 
+    font-size: 0.875rem; 
+    transition: color 0.3s;
+    padding: 5px 0;
+    position: relative;
+    white-space: nowrap;
+}
+.nav-links a:hover{ color: var(--gold); }
+
+/* Utility Links Decoration */
+.nav-utility a { font-weight: 600; color: rgba(255, 255, 255, 0.6); font-family: 'Cinzel', serif; }
+.nav-utility a:hover { color: var(--gold); }
+.nav-utility a::after {
+    content: ''; position: absolute; bottom: -5px; left: 0;
+    width: 100%; height: 2px; background-color: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s ease;
+}
+.nav-utility a:hover::after { transform: scaleX(1); }
+
+
+/* --- RESPONSIVE NAVBAR (Mobile Logic - Tampilan Grid) --- */
+@media (max-width: 960px) {
+  nav { padding: 0 20px; }
+  
+  .nav-toggle { display: flex; } 
+
+  .nav-links-container {
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      /* Batasi tinggi container agar sisa layar bisa di-scroll jika perlu */
+      max-height: calc(100vh - 70px); 
+      overflow-y: auto; /* Jaga-jaga jika layar HP sangat pendek */
+      
+      background: rgba(3, 27, 20, 0.98);
+      border-bottom: 1px solid var(--border);
+      
+      flex-direction: column;
+      align-items: stretch; /* Agar lebar penuh */
+      padding: 20px;
+      gap: 25px;
+      
+      transform: translateY(-150%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .nav-links-container.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+  }
+
+  /* UTILITY LINKS (Home, Timeline, Peta) - Tetap Baris tapi dipusatkan */
+  .nav-utility { 
+      order: 1; 
+      display: flex;
+      flex-direction: row; /* Jejer ke samping */
+      justify-content: center;
+      gap: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3); /* Garis pemisah gold */
+  }
+
+  /* CONTENT LINKS (Bab 1-9) - JADI GRID */
+  .nav-content { 
+      order: 2; 
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 Kolom */
+      gap: 10px;
+      width: 100%;
+  }
+
+  /* Styling Tombol Grid */
+  .nav-content a {
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 12px 5px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s ease;
+      white-space: normal; /* Agar teks panjang bisa turun baris */
+      line-height: 1.3;
+  }
+
+  /* Efek Hover di HP */
+  .nav-content a:active, .nav-content a:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: scale(0.98);
+  }
+
+  /* Utility links styling override */
+  .nav-utility a {
+      font-size: 1rem;
+      padding: 5px;
+  }
+
+    
+    /* Order utility links to bottom on mobile */
+    .nav-utility { order: 2; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 10px; }
+    .nav-content { order: 1; }
+}
+
+/* --- HERO & LAYOUT --- */
+.page-header{
+    padding: 140px 20px 60px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+.page-header h2{ margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.page-header p{ font-size: 1.1rem; opacity: 0.9; }
+
+.section{
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden; 
+}
+.section-inner{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 50px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+/* Divider Style */
+.divider {
+    width: 60%; max-width: 800px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+    margin: 0 auto; opacity: 0.5; position: relative;
+}
+.divider::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); width: 10px; height: 10px;
+    background-color: var(--gold); border-radius: 50%; box-shadow: 0 0 8px var(--gold);
+}
+
+/* Content Cards */
+.text-content{ flex: 1 1 550px; } /* Basis lebar text */
+.text-card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    position: relative;
+    backdrop-filter: blur(5px);
+}
+.text-card::before {
+    content: ''; position: absolute; top:0; left:0; right:0; height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+}
+
+.sub-section { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+.sub-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.lesson-table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
+}
+.lesson-table th, .lesson-table td {
+padding: 10px 15px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+text-align: left;
+}
+.lesson-table th {
+background-color: var(--green-mid);
+color: #fff;
+font-weight: 700;
+font-family: 'Cinzel', serif;
+}
+.lesson-table tr:nth-child(even) {
+background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Image Box */
+.img-box{
+    flex: 0 0 400px;
+    position: sticky;
+    top: 100px;
+    transition: all 0.3s;
+}
+.img-frame{
+    width: 100%; border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--border); background: #000;
+}
+.img-frame img{
+    width: 100%; height: auto; display: block;
+    opacity: 0.8; transition: opacity 0.5s;
+}
+.img-caption {
+    font-size: 0.85rem; color: rgba(255,255,255,0.5); 
+    margin-top: 10px; text-align: center; font-style: italic;
+}
+
+.row { display: flex; gap: 50px; width: 100%; }
+.row.rev { flex-direction: row-reverse; }
+
+/* Animations */
+.reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* --- RESPONSIVE LAYOUT (Content) --- */
+@media (max-width: 960px){
+    /* Stack layout untuk tablet & mobile */
+    .row, .row.rev { flex-direction: column; }
+    
+    .img-box { 
+        flex: auto; width: 100%; 
+        position: static; /* Matikan sticky agar tidak ganggu scroll mobile */
+        margin-bottom: 40px; 
+    }
+    
+    /* Text card selalu di bawah gambar */
+    .text-content { order: 2; width: 100%; flex: auto; }
+    .img-box { order: 1; }
+    
+    .text-card { padding: 25px; }
+}
+
+@media (max-width: 600px){
+    .section { padding: 60px 15px; }
+    .page-header { padding: 120px 15px 40px; }
+    h2 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <h1>Sejarah Peradaban Islam</h1>
+    
+    <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="nav-links-container" id="navLinks">
+        <div class="nav-links nav-utility">
+            <a href="index.html#home">Home</a>
+            <a href="timeline.html">Timeline</a>
+            <a href="index.html#peta">Peta</a>
+        </div>
+    
+        <div class="nav-links nav-content">
+<a href="#section-1">1. Piagam</a>
+<a href="#section-2">2. Badar</a>
+<a href="#section-3">3. Uhud</a>
+<a href="#section-4">4. Khandaq</a>
+<a href="#section-5">5. Hudaibiyah</a>
+<a href="#section-6">6. Khaibar</a>
+<a href="#section-7">7. Fathu Makkah</a>
+<a href="#section-7">8. Haji </a>
+<a href="#section-8">9. Fathu Makkah</a>
+</div>
+</div>
+</nav>
+
+<header id="home" class="page-header reveal">
+<p style="color:var(--gold); font-weight:600; letter-spacing:2px; margin-bottom:10px;">BAGIAN C</p>
+<h2>Periode Madinah (1 – 11 H)</h2>
+<p>Fase pembentukan negara, konstitusi pertama, dan perjuangan fisik mempertahankan eksistensi Islam.</p>
+</header>
+
+<section id="section-1" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>1. Kelahiran Sebuah Peradaban</h3>
+
+<div class="sub-section">
+<h4>A. Latar Belakang: Mosaik Sosial Yatsrib</h4>
+<p>Tahun pertama Hijrah. Madinah (Yatsrib) sangat berbeda dengan Makkah yang dikuasai satu suku. Yatsrib adalah mosaik sosial yang rapuh dengan dendam perang 120 tahun:</p>
+<ul>
+<li><strong>Dua Suku Arab:</strong> Aus dan Khazraj (baru saja berhenti perang).</li>
+<li><strong>Tiga Kabilah Yahudi:</strong> Bani Qainuqa’, Bani Nadhir, Bani Qurayzhah (menguasai ekonomi & literasi).</li>
+<li><strong>Kaum Muslim:</strong> Muhajirin (pendatang) dan Anshar (pribumi).</li>
+<li><strong>Oportunis:</strong> Tokoh seperti Abdullah bin Ubay bin Salul yang terancam pengaruhnya.</li>
+</ul>
+<p>Rasulullah ﷺ datang bukan untuk berperang, melainkan membangun tatanan sosial baru agar kota tidak runtuh. Madinah membutuhkan konstitusi.</p>
+</div>
+
+<div class="sub-section">
+<h4>B. Langkah Revolusioner: Piagam Madinah</h4>
+<p>Rasulullah ﷺ mengumpulkan pemimpin Aus, Khazraj, Yahudi, Muhajirin, dan tokoh netral. Setelah diskusi panjang menyerap aspirasi tiap kelompok, lahirlah <strong>Piagam Madinah (Dustur al-Madinah)</strong>. Ini adalah konstitusi tertulis pertama di dunia untuk masyarakat majemuk.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Isi Pokok Konstitusi</h4>
+<ul>
+<li><strong>Identitas Kolektif:</strong> Semua penanda tangan adalah satu umat politik (Ummah), melampaui batas suku dan ras.</li>
+<li><strong>Kebebasan Beragama:</strong> "Kaum Yahudi dengan agama mereka, kaum Muslim dengan agama mereka."</li>
+<li><strong>Keadilan Tertinggi:</strong> Hakim tertinggi adalah Rasulullah ﷺ. Tidak ada perlindungan bagi pelaku kezaliman, walau kerabat sendiri.</li>
+<li><strong>Pertahanan Bersama:</strong> Jika Madinah diserang, Muslim dan Yahudi wajib membela bersama.</li>
+<li><strong>Hukum Darah:</strong> Pembunuhan tidak boleh dibalas tanpa proses hukum (menghapus tradisi balas dendam Jahiliyah).</li>
+<li></li>
+</ul>
+</div>
+
+<div class="sub-section">
+<h4>D. Dampak Peradaban</h4>
+<p>Piagam ini mengubah Madinah dari kota perang menjadi negara kota beradab. Keamanan terjamin, ekonomi bangkit, dan dakwah berjalan damai. Ini menjadi bukti bahwa sejak awal, Islam lahir sebagai agama sekaligus peradaban.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="Piagam Madinah.jpg" alt="Ilustrasi Piagam Madinah">
+</div>
+<div class="img-caption">Piagam Madinah: Blueprint peradaban yang menyatukan berbagai etnis di bawah satu hukum.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-2" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>2. Perang Badar (2 H / 624 M)</h3>
+
+<div class="sub-section">
+<h4>A. Hari Terbitnya Izzah Islam</h4>
+<p>Berawal dari upaya mencegat kafilah dagang Abu Sufyan sebagai ganti rugi harta Muhajirin yang dirampas di Makkah. Quraisy merespons dengan mengirim <strong>1.000 pasukan</strong> bersenjata lengkap.</p>
+<p>Rasulullah ﷺ hanya membawa <strong>313 pasukan</strong> (80-an Muhajirin, sisanya Anshar), dengan perlengkapan minim (hanya 2 kuda & 70 unta). Beliau mendirikan tenda, menangis dalam doa di malam hari: <em>“Ya Allah, jika pasukan ini binasa, maka Engkau tidak akan disembah lagi di muka bumi.”</em></p>
+</div>
+
+<div class="sub-section">
+<h4>B. Duel Kehormatan & Pertempuran</h4>
+<p>Pagi hari dibuka dengan duel satu lawan satu yang dimenangkan telak oleh pihak Muslim:</p>
+<div class="duel-list">
+<div class="duel-item">Vs Utbah bin Rabi’ah</div>
+<div class="duel-item"><strong>Hamzah bin Abdul Muthallib</strong> (Menang)</div>
+<div class="duel-item">Vs Syaibah</div>
+<div class="duel-item"><strong>Ali bin Abi Thalib</strong> (Menang)</div>
+<div class="duel-item">Vs Walid</div>
+<div class="duel-item"><strong>Ubaidah bin Harits</strong> (Gugur Syahid)</div>
+</div>
+<p>Di tengah perang, Nabi ﷺ berseru: <em>“Jibril telah turun membawa seribu malaikat.”</em> Angin keras berputar, debu naik, dan barisan Quraisy kacau balau.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Kemenangan Telak</h4>
+<p>Tokoh utama Quraisy seperti <strong>Abu Jahal</strong> dan Umayyah bin Khalaf tewas. Nabi berdiri di sumur Badar memanggil nama mereka: <em>"Sungguh aku telah menemukan janji Tuhanku benar."</em></p>
+<p>Kemenangan ini membuat Madinah diakui sebagai kekuatan politik sah, namun menanam dendam mendalam di hati Quraisy yang akan meletus di Uhud. </p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="Muhammad_at_Badr.jpg" alt="Peta Perang Badar">
+</div>
+<div class="img-caption">Perang Badar di Padang Badar, saksi bisu bentrokan pertama antara Tauhid dan Syirik.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-3" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>3. Perang Uhud (3 H / 625 M)</h3>
+
+<div class="sub-section">
+<h4>A. Ujian Kepatuhan</h4>
+<p>Quraisy membalas dengan <strong>3.000 pasukan</strong> melawan <strong>700 Muslim</strong> di kaki Gunung Uhud. Nabi menempatkan 50 pemanah di Bukit Rummah dengan perintah mutlak: <em>“Apa pun yang terjadi, jangan turun. Kemenangan atau kekalahan, tetap di tempatmu.”</em></p>
+</div>
+
+<div class="sub-section">
+<h4>B. Pelanggaran & Serangan Balik</h4>
+<p>Awalnya Muslim menang dan Quraisy mundur. Namun, melihat harta rampasan (ghanimah), 39 pemanah melanggar perintah dan turun, mengabaikan komandan Abdullah bin Jubair. </p>
+<p><strong>Khalid bin Walid</strong> (saat itu belum Islam) melihat celah bukit kosong. Pasukan berkudanya memutar dan menyerang dari belakang. Pasukan Muslim terjepit, kacau balau, bahkan muncul desas-desus "Muhammad telah gugur!".</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Cedera Nabi & Syahidnya Hamzah</h4>
+<p>Nabi tidak gugur, tapi terluka parah: gigi patah, wajah berdarah, dan topi besi menancap di pipi. Beliau berkata: <em>“Bagaimana suatu kaum akan beruntung jika mereka melukai Nabi mereka?”</em></p>
+<p>Sebanyak 70 sahabat syahid, termasuk <strong>Hamzah bin Abdul Muthallib</strong> yang dimutilasi. Jibril turun membawa pelajaran abadi: <em>Kemenangan di Badar karena ketaatan, kesulitan di Uhud karena pelanggaran.</em></p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="gunung-uhud.webp" alt="Gunung Uhud">
+</div>
+<div class="img-caption">Bukit Pemanah (Jabal Rummah) di Uhud, tempat strategi berbalik menjadi tragedi.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-4" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>4. Perang Khandaq (5 H / 627 M)</h3>
+
+<div class="sub-section">
+<h4>A. Benih Peperangan dan Koalisi Besar</h4>
+<p>Islam menghadapi ancaman terbesar: Koalisi **10.000 pasukan** (disebut Al-Ahzab) yang dibentuk oleh Quraisy, Yahudi **Bani Nadhir** (yang diusir), kabilah Badui Najd, dan kaum munafik Madinah. Tujuannya adalah menghapus Islam dari muka bumi. Muslim hanya berjumlah **3.000**. </p>
+</div>
+
+<div class="sub-section">
+<h4>B. Strategi Parit (Khandaq)</h4>
+<p><strong>Salman Al-Farisi</strong> mengusulkan strategi asing: menggali parit di sisi terbuka Madinah untuk menghalangi serangan berkuda. Walau kelaparan dan diejek kaum munafik, Rasulullah ﷺ ikut menggali. Saat batu besar menghalangi, beliau memukulnya tiga kali, dan setiap pukulan memancarkan kilat cahaya, memberikan janji penaklukan negeri-negeri besar (Romawi dan Persia), yang membuat sahabat menangis haru sementara munafik tertawa.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Puncak Krisis dan Pertolongan Allah</h4>
+<p>Pasukan musuh terhenti oleh parit. Namun, krisis memuncak saat <strong>Bani Qurayzhah</strong> berkhianat dari selatan. Di saat genting, terjadi duel: <strong>Amr bin Abdu Wudd</strong> (pendekar paling ditakuti) ditantang oleh <strong>Ali bin Abi Thalib</strong>. Ali menang, mematahkan semangat penyerang.</p>
+<p>Setelah itu, Rasulullah ﷺ berdoa memohon pertolongan. Malam itu, <strong>badai besar</strong> datang: tenda musuh terbang, api padam, kuda panik, dan peralatan perang hancur. Koalisi besar musuh kocar-kacir tanpa pertempuran besar.</p>
+</div>
+
+<div class="sub-section">
+<h4>D. Akhir dan Perubahan Posisi</h4>
+<p>Allah menurunkan kemenangan tanpa banyak darah. Rasulullah ﷺ bersabda: <strong>“Setelah hari ini, Quraisy tidak akan menyerang kita. Kita yang akan mendatangi mereka.”</strong> Khandaq menandai peralihan posisi Islam, dari bertahan menjadi menyerang.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="Pelajaran-Hikmah-dari-Perang-Khandaq-perang-ahzab.webp" alt="Ilustrasi parit Perang Khandaq">
+</div>
+<div class="img-caption">Parit (Khandaq), strategi jenius Salman Al-Farisi yang menghentikan serangan koalisi 10.000 pasukan.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-5" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>5. Perjanjian Hudaibiyah (6 H / 628 M)</h3>
+
+<div class="sub-section">
+<h4>A. Perjalanan Tanpa Niat Perang</h4>
+<p>Tahun ke-6 Hijriah. Di tengah kemenangan militer, muncul kerinduan mendalam Rasulullah ﷺ dan kaum Muslimin untuk menyentuh Ka’bah yang telah lama ditinggalkan. Rasulullah ﷺ mengumumkan: <em>“Mari kita pergi untuk berumrah, bukan untuk berperang.”</em></p>
+<p>Sekitar <strong>1.400 sahabat</strong> bergerak dengan pakaian Ihram, hanya membawa pedang bersarung (senjata musafir). Namun saat tiba di dekat Hudaibiyah, unta Rasulullah ﷺ, <strong>Al-Qashwa</strong>, mendadak berlutut dan menolak bangkit. Rasul bersabda: <em>“Qashwa tidak membangkang. Tapi yang menahan adalah Dzat yang menahan gajah-gajah Abrahah.”</em> Allah menahan mereka agar tidak masuk secara paksa.</p>
+</div>
+
+<div class="sub-section">
+<h4>B. Diplomasi Tegang & Baiat Ridwan</h4>
+<p>Rasulullah ﷺ mengirim Utsman bin Affan untuk bernegosiasi, namun ia tertahan lama hingga muncul rumor ia dibunuh. Situasi memanas. Di bawah sebuah pohon, Rasulullah ﷺ mengajak para sahabat melakukan <strong>Baiat Ridwan</strong>: sumpah setia untuk bertahan sampai mati. Mendengar kekompakan ini, nyali Quraisy menciut dan akhirnya mengirim Suhail bin Amr untuk berdamai.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Penulisan Naskah yang Menyakitkan</h4>
+<p>Saat perjanjian ditulis oleh Ali bin Abi Thalib, ketegangan emosional memuncak. Suhail menolak kalimat <em>"Bismillahirrahmanirrahim"</em> dan menolak gelar <em>"Muhammad Rasulullah"</em>. Ia berkata: <em>"Jika kami mengakui engkau Rasulullah, kami tak akan menghalangimu. Tulislah Muhammad bin Abdullah."</em></p>
+<p>Para sahabat marah dan Ali menolak menghapusnya. Namun, Rasulullah ﷺ dengan tangan beliau sendiri menghapus gelar tersebut demi tercapainya perdamaian. Ini adalah pengorbanan ego yang luar biasa.</p>
+</div>
+
+<div class="sub-section">
+<h4>D. Isi Perjanjian & Ujian Abu Jandal</h4>
+<p>Isi perjanjian terasa sangat merugikan Muslim:</p>
+<ul>
+<li>Gencatan senjata selama 10 tahun.</li>
+<li>Muslim harus pulang tahun ini, baru boleh umrah tahun depan (hanya 3 hari).</li>
+<li><strong>Ekstradisi Sepihak:</strong> Orang Quraisy yang masuk Islam dan lari ke Madinah harus dikembalikan, namun Muslim yang murtad ke Makkah tidak perlu dikembalikan.</li>
+</ul>
+<p>Saat naskah selesai, <strong>Abu Jandal</strong> (anak Suhail yang masuk Islam) datang dengan kaki dirantai memohon perlindungan. Namun demi memegang janji, Rasulullah ﷺ dengan berat hati membiarkannya dibawa kembali oleh ayahnya. <em>“Bersabarlah, Allah akan memberimu jalan keluar,”</em> bisik beliau.</p>
+</div>
+
+<div class="sub-section">
+<h4>E. Kemenangan yang Tak Disadari (Al-Fath)</h4>
+<p>Dalam perjalanan pulang, Umar bin Khattab dengan sedih bertanya: <em>"Bukankah kita di jalan yang benar? Mengapa kita menerima kehinaan ini?"</em> Rasulullah ﷺ menjawab tegas: <em>“Aku adalah hamba Allah, dan Dia tidak akan menelantarkanku.”</em></p>
+<p>Allah kemudian menurunkan **Surah Al-Fath**: <em>"Sesungguhnya Kami telah memberikan kepadamu kemenangan yang nyata."</em> Sejarah membuktikan kebenarannya: Dalam 2 tahun perdamaian, jumlah orang yang masuk Islam meledak jauh lebih banyak dibanding masa perang. Hudaibiyah adalah kemenangan diplomasi yang membuka jalan menuju **Fathu Makkah** tanpa pertumpahan darah.</p>
+</div>
+
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="images.jpeg" alt="Ilustrasi penandatanganan Perjanjian Hudaibiyah">
+</div>
+<div class="img-caption">Baiat Ridwan dan Perjanjian Hudaibiyah: Saat ketaatan diuji melampaui logika perang.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-6" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>6. Perang Khaibar (7 H / 629 M)</h3>
+
+<div class="sub-section">
+<h4>A. Jatuhnya Basis Intel dan Ekonomi Yahudi</h4>
+<p>Tujuan utama penyerangan adalah menetralisir <strong>Khaibar</strong>, benteng pertanian dan militer Yahudi terbesar, yang menjadi tempat berlindung dan markas perencanaan pengkhianatan oleh <strong>Bani Nadhir</strong> (dalang Perang Khandaq).</p>
+<p>Khaibar dijaga oleh <strong>7 benteng besar</strong> dengan dinding tebal, pintu besi, dan pasukan pemanah ahli, menyimpan cadangan makanan bertahun-tahun.</p>
+</div>
+
+<div class="sub-section">
+<h4>B. Penunjukan Ali bin Abi Thalib</h4>
+<p>Setelah pengepungan yang panjang, Rasulullah ﷺ bersabda: <em>“Besok, panji perang akan ku berikan kepada seseorang yang dicintai Allah dan Rasul-Nya.”</em> Keesokan harinya, beliau memanggil <strong>Ali bin Abi Thalib</strong> yang sedang sakit mata. Rasulullah ﷺ meludah ke matanya, dan Ali pun seketika sembuh, lalu memimpin pasukan dengan panji putih.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Duel dan Penaklukan</h4>
+<p>Di Khaibar, Ali menghadapi pahlawan Yahudi, <strong>Marhab</strong>, yang berseru kebanggaannya. Ali menjawab: <em>“Aku adalah orang yang diberi nama oleh ibuku Haidarah — Singa padang pasir!”</em> Ali memenangkan duel dengan cepat, dan semangat Muslim membara, membuat benteng demi benteng Khaibar jatuh. </p>
+</div>
+
+<div class="sub-section">
+<h4>D. Akhir dan Perjanjian Ekonomi</h4>
+<p>Rasulullah ﷺ tidak mengusir penduduk Khaibar, melainkan memberi opsi: <strong>tinggal dan bekerja</strong> di sana dengan syarat <strong>membayar 50% hasil pertanian</strong> sebagai upeti. Perjanjian ini menjadikan Khaibar sumber ekonomi besar bagi Madinah, menjamin stabilitas jangka panjang.</p>
+<p><strong>Insiden:</strong> Seorang wanita Yahudi, <strong>Ummu Walid</strong>, menghidangkan daging beracun kepada Nabi ﷺ. Beliau berhenti makan setelah diberi tahu oleh daging itu sendiri, namun sahabat Bishr bin Bara meninggal. Wanita itu dihukum mati (qishash) setelah menyebabkan kematian.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="penampakan-khaibar-source-pinterest-1-1024x768.jpg" alt="Benteng Khaibar">
+</div>
+<div class="img-caption">Salah satu benteng di Khaibar, yang merupakan pusat kekuatan militer dan ekonomi Yahudi.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+
+<section id="section-7" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>7. Penaklukan Makkah (Fathu Makkah - 8 H / 630 M)</h3>
+
+<div class="sub-section">
+<h4>A. Pelanggaran Perjanjian & Latar Belakang</h4>
+<p>Awal Penaklukan Makkah berakar dari <strong>Perjanjian Hudaibiyah</strong> (6 H) yang menetapkan gencatan senjata 10 tahun. Namun, perjanjian itu dilanggar oleh <strong>Quraisy</strong> ketika mereka secara diam-diam membantu sekutu mereka, <strong>Bani Bakr</strong>, menyerang sekutu Muslim, <strong>Bani Khuza'ah</strong>, di daerah Al-Watir. Penyerangan bahkan terjadi di <strong>Masjidil Haram</strong>—pelanggaran terhadap kesucian Tanah Suci. Pemimpin Khuza'ah mengadukan hal ini kepada Rasulullah ﷺ di Madinah, yang kemudian membulatkan tekad untuk bertindak tegas.</p>
+</div>
+
+<div class="sub-section">
+<h4>B. Diplomasi Terakhir & Operasi Rahasia</h4>
+<p>Quraisy, menyadari kesalahan fatal mereka, mengirim <strong>Abu Sufyan bin Harb</strong> ke Madinah untuk memperbarui perjanjian. Namun, ia diabaikan oleh Rasulullah ﷺ, Abu Bakar, Umar, dan Ali—menunjukkan bahwa pintu diplomasi telah tertutup. Setelah itu, Rasulullah ﷺ memerintahkan persiapan ekspedisi militer terbesar saat itu: sekitar <strong>10.000 pasukan Muslim</strong>. Tujuannya adalah <strong>Menaklukkan Mekah tanpa perang</strong>, sehingga Rasulullah ﷺ menjaga <strong>kerahasiaan total</strong> rute dan tujuan ekspedisi.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Kekuatan Psikologis & Masuknya Abu Sufyan</h4>
+<p>Pasukan tiba di Marr az-Zahran, di luar Mekah. Rasulullah ﷺ memerintahkan <strong>10.000 api unggun</strong> dinyalakan serentak. Cahaya yang luar biasa ini menimbulkan <strong>efek kejut psikologis</strong> pada Quraisy. <strong>Abu Sufyan</strong> keluar memata-matai, tertangkap, dan dibawa menghadap Nabi ﷺ. Meskipun enggan, ia akhirnya mengucapkan syahadat.</p>
+<p>Sebagai bentuk pemaafan dan jaminan keamanan, Rasulullah ﷺ mengumumkan: <strong>“Siapa yang masuk rumah Abu Sufyan—aman. Siapa yang masuk Masjidil Haram—aman. Siapa yang tetap di rumahnya—aman.”</strong></p>
+</div>
+
+<div class="sub-section">
+<h4>D. Hari Pemaafan Besar (Yaumul Marhamah)</h4>
+<p>Pasukan Muslim memasuki Mekah dari empat arah dengan perintah mutlak: <strong>“Jangan menumpahkan darah.”</strong> Kota itu menyerah hampir tanpa perlawanan, kecuali bentrokan kecil yang segera diredakan. Di depan Ka'bah, Rasulullah ﷺ di hadapan para tokoh Quraisy yang ketakutan, mengucapkan kata-kata agung:</p>
+<p><strong>“Wahai kaum Quraisy, apa sangkaan kalian terhadap apa yang akan aku lakukan kepada kalian?”</strong> Mereka menjawab: <strong>“Engkau saudara kami yang mulia, putra saudara kami yang mulia.”</strong> Jawaban beliau adalah: <strong>“Pergilah. Kalian bebas.” (Idhhabu fa antum al-thulaqā’)</strong>. Ini adalah kemenangan akhlak dan pemaafan terbesar dalam sejarah.</p>
+</div>
+
+<div class="sub-section">
+<h4>E. Penghancuran Berhala & Dampak Global</h4>
+<p>Rasulullah ﷺ memasuki Ka'bah. Dengan tongkatnya, beliau menunjuk <strong>360 berhala</strong> di sekitar Ka'bah satu per satu, sambil membaca firman Allah: <strong>“Jaa al-haqq wa zahaqal-bāthil” (Kebenaran telah datang dan kebatilan telah lenyap)</strong>. Berhala-berhala itu roboh, menandai kembalinya Mekah sebagai <strong>pusat tauhid</strong>.</p>
+<p>Dampak Penaklukan Mekah sangat besar: <strong>Berbondong-bondong suku Arab masuk Islam</strong>, dan Islam bertransisi dari kekuatan regional menjadi <strong>kekuatan pemersatu bangsa Arab</strong>. Kemenangan ini membuktikan bahwa <strong>pemaafan</strong> di atas kekuasaan adalah kunci kemenangan spiritual dan politik sejati.</p>
+
+<table class="lesson-table" style="margin-top: 30px;">
+<thead>
+<tr>
+<th>Aspek Fathu Makkah</th>
+<th>Fakta Konkret</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Waktu</strong></td>
+<td>8 H / Januari 630 M</td>
+</tr>
+<tr>
+<td><strong>Kekuatan Pasukan Muslim</strong></td>
+<td>±<strong>10.000</strong> orang</td>
+</tr>
+<tr>
+<td><strong>Strategi Utama</strong></td>
+<td><strong>Kerahasiaan</strong> dan <strong>Kekuatan Psikologis (10.000 Api Unggun)</strong></td>
+</tr>
+<tr>
+<td><strong>Korban Jiwa</strong></td>
+<td>Sangat minim (hampir <strong>nol</strong>), Mekah menyerah tanpa pertumpahan darah</td>
+</tr>
+<tr>
+<td><strong>Prinsip Kunci</strong></td>
+<td><strong>Pemaafan Total</strong> (Idhhabu fa antum al-thulaqā’)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="65f867ef58c4d.jpg" alt="Masjid Nabawi dan tempat makam Nabi Muhammad">
+</div>
+<div class="img-caption">Rasulullah ﷺ memasuki Makkah, menaklukkan kota suci bukan dengan pedang, melainkan dengan pemaafan.</div>
+</div>
+</div>
+</section>
+
+
+
+<div class="divider reveal"></div>
+
+
+
+<section id="section-8" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>8. Haji Wada’ — Perjalanan Terakhir Sang Nabi (10 H / 632 M)</h3>
+
+<div class="sub-section">
+<h4>A. Tanda-Tanda Awal & Ajakan Terakhir</h4>
+<p>Pada tahun ke-10 Hijriyah, setelah Islam mendominasi hampir seluruh Jazirah Arab, Rasulullah ﷺ mengumumkan niatnya untuk menunaikan Haji. Kabar ini menyebar dengan cepat, menarik lebih dari <strong>124.000 orang</strong> dari berbagai penjuru (Yaman, Najd, Syam, dll.) untuk berhaji di bawah bimbingan langsung beliau—jumlah Muslim terbesar yang pernah berkumpul. Para sahabat merasakan kegembiraan, bercampur haru, sebab ini adalah haji pertama mereka bersama Nabi sejak Hijrah, sekaligus firasat bahwa ini mungkin adalah perpisahan.</p>
+</div>
+
+<div class="sub-section">
+<h4>B. Keberangkatan & Gema Talbiyah</h4>
+<p>Rasulullah ﷺ berangkat dari Madinah pada 26 Dzulqa’dah, menunggangi unta kesayangan beliau, <strong>Al-Qashwa'</strong>. Beliau mengambil miqat di Dzul Hulaifah (Bir Ali). Setelah mandi dan berwewangian, beliau berniat dengan kalimat: <em>“Labbaika Allahumma hajjan.”</em> Seluruh rombongan kemudian mengikuti dengan gema talbiyah yang memecah kesunyian padang pasir: <em>“Labbaikallahumma labbaik…”</em> Perjalanan itu terasa sakral, seolah bumi pun menyaksikan salam perpisahan.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Puncak Sejarah: Khutbah Arafah</h4>
+<p>Puncak dari ibadah ini terjadi pada <strong>9 Dzulhijjah</strong> di Padang Arafah. Di hadapan ribuan umat, Rasulullah ﷺ menyampaikan khutbah monumental dari atas unta beliau. Khutbah tersebut menjadi wasiat abadi dan konstitusi moral terakhir umat:</p>
+<ul>
+<li><strong>Kesucian:</strong> Darah, harta, dan kehormatan manusia adalah haram dilanggar (suci).</li>
+<li><strong>Ekonomi:</strong> Sistem riba (bunga) Jahiliyah dihapuskan.</li>
+<li><strong>Sosial:</strong> Perempuan wajib diperlakukan dengan baik dan hormat.</li>
+<li><strong>Umat:</strong> Semua Muslim bersaudara tanpa memandang suku, ras, atau warna kulit.</li>
+<li><strong>Sumber Hukum:</strong> Tinggalkan Al-Qur’an dan Sunnah, yang dengannya umat tidak akan tersesat.</li>
+</ul>
+<p>Beliau menutup khutbah dengan pertanyaan mengguncang: <strong>“Sudahkah aku sampaikan?”</strong> Setelah umat menjawab serentak, beliau menunjuk ke langit: <strong>“Ya Allah, saksikanlah… Ya Allah, saksikanlah… Ya Allah, saksikanlah.”</strong></p>
+</div>
+
+<div class="sub-section">
+<h4>D. Ayat Kesempurnaan & Firasat Perpisahan</h4>
+<p>Saat matahari hampir terbenam di Arafah, turunlah ayat yang menguatkan firasat para sahabat, khususnya Umar bin Khattab:</p>
+<blockquote style="font-style:normal;">
+<p style="margin:0;">“Pada hari ini telah Aku sempurnakan agama kalian untuk kalian, Aku telah cukupkan nikmat-Ku bagi kalian, dan Aku ridai Islam sebagai agama kalian.”</p>
+<footer style="font-size:0.9em; margin-top:5px;">(QS Al-Ma’idah 5:3)</footer>
+</blockquote>
+<p>Umar menangis karena memahami bahwa kesempurnaan risalah ini berarti tugas Nabi telah selesai, dan perpisahan sudah dekat. Haji Wada’ (Haji Perpisahan) adalah penutup risalah kenabian dan penyerahan amanat dakwah kepada seluruh umat.</p>
+
+<table class="lesson-table" style="margin-top: 20px;">
+<thead>
+<tr>
+<th>Aspek Haji Wada’</th>
+<th>Makna Fundamental</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jumlah Umat</strong></td>
+<td>Manifestasi puncak persatuan (sekitar 124.000 orang).</td>
+</tr>
+<tr>
+<td><strong>Khutbah Arafah</strong></td>
+<td>Konstitusi sosial-moral terakhir untuk kemanusiaan.</td>
+</tr>
+<tr>
+<td><strong>Turunnya Al-Ma'idah: 3</strong></td>
+<td>Proklamasi kesempurnaan Islam; tugas Nabi selesai.</td>
+</tr>
+<tr>
+<td><strong>Amanah Utama</strong></td>
+<td>Kewajiban menyampaikan risalah: “Sampaikan dariku walau satu ayat.”</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="asalusul-dan-sejarah-jabal-arafah-tempat-jemaah-haji-melaksanakan-wukuf-vki.jpeg" alt="Ilustrasi khutbah di Padang Arafah">
+</div>
+<div class="img-caption">Padang Arafah, saksi bisu khutbah terbesar dan amanat terakhir Sang Nabi kepada umat manusia.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-9" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>9. Wafatnya Nabi Muhammad ﷺ — 9.Perpisahan Sang Kekasih Umat (11 H / 632 M)</h3>
+
+<div class="sub-section">
+<h4>A. Awal Sakit & Isyarat Perpisahan</h4>
+<p>Setelah Haji Wada’, tanda-tanda perpisahan semakin jelas. Nabi ﷺ mulai merasakan demam dan sakit kepala hebat pada akhir bulan Safar. Beliau memilih dirawat di rumah istrinya, <strong>Aisyah r.a.</strong> Sebelum sakit, beliau sempat menziarahi makam Baqi’ dan syuhada Uhud, seolah berpamitan. Bahkan, dalam khotbah terakhirnya di masjid, beliau mengulang: <em>“Seorang hamba diberi pilihan antara dunia dan apa yang ada di sisi Allah, dan ia memilih apa yang ada di sisi Allah.”</em> Hanya <strong>Abu Bakar r.a.</strong> yang memahami isyarat tersebut dan menangis.</p>
+</div>
+
+<div class="sub-section">
+<h4>B. Insiden Tinta dan Pena (Raziya al-Khamis)</h4>
+<p>Beberapa hari sebelum wafat, saat sakitnya memuncak, Nabi ﷺ berkata: <em>“Bawakan kepadaku kertas dan tinta, aku akan menuliskan untuk kalian suatu tulisan, yang kalian tidak akan tersesat setelahnya selamanya.”</em> Sebagian sahabat berselisih pendapat di hadapan beliau—Umar r.a. berpendapat Kitabullah sudah cukup (<strong>Hasbunā Kitābullāh</strong>), sementara yang lain meminta agar Nabi diberi pena. Melihat perselisihan ini, Nabi ﷺ berkata: <em>“Bangkitlah kalian dari sisiku.”</em> Beliau tidak ingin wahyu terakhir diturunkan dalam suasana tegang.</p>
+</div>
+
+<div class="sub-section">
+<h4>C. Penunjukan Imam dan Senyum Terakhir</h4>
+<p>Ketika tidak mampu lagi mengimami shalat, Nabi ﷺ menunjuk <strong>Abu Bakar r.a.</strong> untuk menggantikan beliau. Ini adalah isyarat politik terbesar mengenai siapa yang akan memimpin umat setelah beliau. Pada pagi hari Ahad, satu hari sebelum wafat, beliau membuka tirai kamar Aisyah. Beliau tersenyum bahagia melihat para sahabat sedang shalat Subuh di belakang Abu Bakar. Tirai itu kemudian tertutup kembali. Ini adalah <strong>senyuman terakhir</strong> Nabi kepada manusia.</p>
+</div>
+
+<div class="sub-section">
+<h4>D. Detik-Detik Wafat dan Heningnya Madinah</h4>
+<p>Pada hari <strong>Senin, 12 Rabi’ul Awal 11 H</strong>, Rasulullah ﷺ menghembuskan napas terakhir, terbaring di pangkuan Aisyah. Di detik-detik terakhir, mata beliau menatap ke atas dan berkata: <em>“Ar-Rafiq al-A‘lā…”</em> (Sahabat/Kekasih Tertinggi). Bahkan, sebelum ruh terangkat, beliau masih sempat berbisik: <em>“Umati… umati…”</em> (Umatku… umatku…). Saat ruh suci itu pergi, Aisyah merasa kepala beliau menjadi berat. Madinah bergejolak, dan Umar r.a. sempat menolak percaya hingga Abu Bakar datang, mencium kening beliau, dan mengumumkan kepada khalayak: <em>“Barang siapa menyembah Muhammad, maka Muhammad telah wafat. Barang siapa menyembah Allah, maka Allah hidup dan tidak akan pernah mati.”</em></p>
+</div>
+
+<div class="sub-section">
+<h4>E. Keputusan Kepemimpinan (Saqifah Bani Sa’idah)</h4>
+<p>Sebelum jenazah Nabi dimakamkan, krisis kepemimpinan pecah. Kaum Anshar berkumpul di Saqifah Bani Sa’idah. Kaum Muhajirin yang dipimpin Abu Bakar dan Umar menyusul. Setelah perdebatan panjang yang menegaskan bahwa kepemimpinan harus berada pada suku yang dihormati di Jazirah Arab, Umar r.a. dengan tegas membaiat Abu Bakar. Keputusan ini menyelamatkan umat dari perpecahan dan menempatkan <strong>Abu Bakar</strong> sebagai <strong>Khalifah</strong> pertama.</p>
+</div>
+
+<div class="sub-section">
+<h4>F. Pemakaman</h4>
+<p>Jenazah Nabi dimandikan dan dikafani oleh Ali bin Abi Thalib, Al-Abbas, dan beberapa sahabat terdekat. Umat shalat jenazah secara berkelompok tanpa imam. Beliau dimakamkan pada malam Selasa di tempat beliau wafat, yaitu di kamar Aisyah, sesuai sabdanya bahwa para Nabi dikuburkan di tempat mereka wafat. Dengan tertutupnya tanah, Madinah merasakan kegelapan yang tak pernah dialami sebelumnya.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="fdsass.jpg" alt="Masjid Nabawi dan tempat makam Nabi Muhammad">
+</div>
+<div class="img-caption">Makna perpisahan: Nabi Muhammad ﷺ meninggalkan dunia tanpa harta, hanya Al-Qur’an, Sunnah, dan amanah kepada umat.</div>
+</div>
+</div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-10" class="section">
+<div class="section-inner" style="justify-content:center;">
+<div class="text-content reveal" style="max-width:900px;">
+<div class="text-card">
+<h3>Kesimpulan Periode Madinah: Warisan Peradaban</h3>
+<p>Seluruh perjalanan dari Hijrah hingga Wafat (1–11 H) adalah cetak biru pembentukan peradaban. Kemenangan Islam bukan hanya karena kekuatan militer, tetapi karena integritas moral dan strategi yang matang:</p>
+
+<table class="lesson-table">
+<thead>
+<tr>
+<th>Peristiwa Kunci</th>
+<th>Esensi Warisan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Piagam Madinah</strong></td>
+<td>Konstitusi multikultural, jaminan kebebasan beragama, dan supremasi hukum.</td>
+</tr>
+<tr>
+<td><strong>Badar & Uhud</strong></td>
+<td>Pelajaran tentang Ketaatan, Keikhlasan, dan harga mati Disiplin Komando.</td>
+</tr>
+<tr>
+<td><strong>Khandaq & Khaibar</strong></td>
+<td>Ketahanan strategis (Inovasi Parit) dan Penguasaan Stabilitas Ekonomi.</td>
+</tr>
+<tr>
+<td><strong>Hudaibiyah & Fathu Makkah</strong></td>
+<td>Kemenangan Diplomasi (Kesabaran) dan Kemenangan Akhlak (Pemaafan Total).</td>
+</tr>
+<tr>
+<td><strong>Haji Wada’ & Wafat</strong></td>
+<td>Amanat Kesempurnaan Risalah dan Penyerahan tanggung jawab kepemimpinan umat.</td>
+</tr>
+</tbody>
+</table>
+<p style="margin-top:20px;"><strong>Madinah sebagai Model:</strong> Periode ini membuktikan bahwa Islam bukan sekadar keyakinan pribadi, tetapi sebuah sistem peradaban yang mampu membangun negara berdaulat, menyusun konstitusi, menaklukkan musuh dengan akhlak, dan meninggalkan warisan hukum yang terperinci.</p>
+
+<div style="margin-top:30px; font-family:'Cinzel', serif; color:var(--gold); text-align: center;">
+— Akhir Periode Kenabian dan Awal Khulafaur Rasyidin —
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+    <p style="text-align:center; padding: 20px 0; font-size: 0.85rem; color: rgba(255,255,255,0.4);">&copy; Sejarah Peradaban Islam</p>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- 1. LOGIKA MENU MOBILE (HAMBURGER) ---
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    if(navToggle && navLinks) {
+        // Toggle menu saat icon hamburger diklik
+        navToggle.addEventListener('click', function(){
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+        
+        // Tutup menu otomatis saat salah satu link diklik
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(){
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Tutup menu jika klik di luar area menu
+        document.addEventListener('click', function(event){
+            if (!navLinks.contains(event.target) && !navToggle.contains(event.target) && navLinks.classList.contains('active')) {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+    }
+
+    // --- 2. INTERSECTION OBSERVER FOR ANIMATION ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Hanya muncul sekali
+            }
+        });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
+    
+    // --- 3. SMOOTH SCROLL ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            // Hanya target ID di halaman ini
+            if(href.startsWith('#') && href.length > 1) {
+                const targetEl = document.querySelector(href);
+                if(targetEl) {
+                    e.preventDefault();
+                    // Offset dikit buat kompensasi navbar fixed
+                    const headerOffset = 80;
+                    const elementPosition = targetEl.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

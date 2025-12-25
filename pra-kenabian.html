@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pra-Kenabian — Sejarah Peradaban Islam</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --gold: #d4af37;
+    --green-dark: #063a2f;
+    --green-deep: #031b14;
+    --green-mid: #0b6b4b;
+    --text: #e0e0e0;
+    --card-bg: rgba(6, 58, 47, 0.45);
+    --border: rgba(212, 175, 55, 0.15);
+    --radius: 16px;
+}
+
+/* Reset & Basic */
+*{box-sizing:border-box}
+html{scroll-behavior: smooth;}
+body{
+    margin:0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, var(--green-dark) 0%, var(--green-deep) 100%);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4 { font-family: "Cinzel", serif; color: var(--gold); margin-top: 0; }
+/* Fluid Typography */
+h2 { font-size: clamp(2rem, 5vw, 3rem); } 
+h3 { font-size: clamp(1.4rem, 4vw, 2rem); }
+h4 { color: #fff; font-size: 1.2rem; margin-bottom: 12px; border-left: 3px solid var(--gold); padding-left: 12px; }
+p { margin-bottom: 1.2em; }
+ul { margin-bottom: 1.2em; padding-left: 20px; }
+li { margin-bottom: 8px; }
+
+/* --- NAVBAR STYLES --- */
+nav {
+    position:fixed; left:0; right:0; top:0;
+    display:flex; 
+    align-items:center; 
+    justify-content: space-between; 
+    padding: 0 30px;
+    background: rgba(3, 27, 20, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    transition: all 0.3s ease;
+    height: 70px;
+}
+nav h1{ margin:0; font-size: 1.125rem; letter-spacing: 1px; }
+
+/* Hamburger Menu Icon (Hidden on Desktop) */
+.nav-toggle {
+    display: none; /* Default hidden */
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+}
+.nav-toggle span {
+    width: 25px; height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+/* Animasi Hamburger menjadi X */
+.nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+.nav-links-container {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-links { 
+    display:flex; 
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text); 
+    text-decoration:none; 
+    font-size: 0.875rem; 
+    transition: color 0.3s;
+    padding: 5px 0;
+    position: relative;
+    white-space: nowrap;
+}
+.nav-links a:hover{ color: var(--gold); }
+
+/* Utility Links Decoration */
+.nav-utility a { font-weight: 600; color: rgba(255, 255, 255, 0.6); font-family: 'Cinzel', serif; }
+.nav-utility a:hover { color: var(--gold); }
+.nav-utility a::after {
+    content: ''; position: absolute; bottom: -5px; left: 0;
+    width: 100%; height: 2px; background-color: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s ease;
+}
+.nav-utility a:hover::after { transform: scaleX(1); }
+
+/* --- RESPONSIVE NAVBAR (Mobile Logic - Tampilan Grid) --- */
+@media (max-width: 960px) {
+  nav { padding: 0 20px; }
+  
+  .nav-toggle { display: flex; } 
+
+  .nav-links-container {
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      /* Batasi tinggi container agar sisa layar bisa di-scroll jika perlu */
+      max-height: calc(100vh - 70px); 
+      overflow-y: auto; /* Jaga-jaga jika layar HP sangat pendek */
+      
+      background: rgba(3, 27, 20, 0.98);
+      border-bottom: 1px solid var(--border);
+      
+      flex-direction: column;
+      align-items: stretch; /* Agar lebar penuh */
+      padding: 20px;
+      gap: 25px;
+      
+      transform: translateY(-150%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .nav-links-container.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+  }
+
+  /* UTILITY LINKS (Home, Timeline, Peta) - Tetap Baris tapi dipusatkan */
+  .nav-utility { 
+      order: 1; 
+      display: flex;
+      flex-direction: row; /* Jejer ke samping */
+      justify-content: center;
+      gap: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3); /* Garis pemisah gold */
+  }
+
+  /* CONTENT LINKS (Bab 1-9) - JADI GRID */
+  .nav-content { 
+      order: 2; 
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 Kolom */
+      gap: 10px;
+      width: 100%;
+  }
+
+  /* Styling Tombol Grid */
+  .nav-content a {
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 12px 5px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s ease;
+      white-space: normal; /* Agar teks panjang bisa turun baris */
+      line-height: 1.3;
+  }
+
+  /* Efek Hover di HP */
+  .nav-content a:active, .nav-content a:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: scale(0.98);
+  }
+
+  /* Utility links styling override */
+  .nav-utility a {
+      font-size: 1rem;
+      padding: 5px;
+  }
+
+    
+    /* Order utility links to bottom on mobile */
+    .nav-utility { order: 2; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 10px; }
+    .nav-content { order: 1; }
+}
+
+/* --- HERO & LAYOUT --- */
+.page-header{
+    padding: 140px 20px 60px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+.page-header h2{ margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.page-header p{ font-size: 1.1rem; opacity: 0.9; }
+
+.section{
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden; 
+}
+.section-inner{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 50px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+/* Divider Style */
+.divider {
+    width: 60%; max-width: 800px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+    margin: 0 auto; opacity: 0.5; position: relative;
+}
+.divider::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); width: 10px; height: 10px;
+    background-color: var(--gold); border-radius: 50%; box-shadow: 0 0 8px var(--gold);
+}
+
+/* Content Cards */
+.text-content{ flex: 1 1 550px; } /* Basis lebar text */
+.text-card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    position: relative;
+    backdrop-filter: blur(5px);
+}
+.text-card::before {
+    content: ''; position: absolute; top:0; left:0; right:0; height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+}
+
+.sub-section { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+.sub-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+/* Image Box */
+.img-box{
+    flex: 0 0 400px;
+    position: sticky;
+    top: 100px;
+    transition: all 0.3s;
+}
+.img-frame{
+    width: 100%; border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--border); background: #000;
+}
+.img-frame img{
+    width: 100%; height: auto; display: block;
+    opacity: 0.8; transition: opacity 0.5s;
+}
+.img-caption {
+    font-size: 0.85rem; color: rgba(255,255,255,0.5); 
+    margin-top: 10px; text-align: center; font-style: italic;
+}
+
+.row { display: flex; gap: 50px; width: 100%; }
+.row.rev { flex-direction: row-reverse; }
+
+/* Animations */
+.reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* --- RESPONSIVE LAYOUT (Content) --- */
+@media (max-width: 960px){
+    /* Stack layout untuk tablet & mobile */
+    .row, .row.rev { flex-direction: column; }
+    
+    .img-box { 
+        flex: auto; width: 100%; 
+        position: static; /* Matikan sticky agar tidak ganggu scroll mobile */
+        margin-bottom: 40px; 
+    }
+    
+    /* Text card selalu di bawah gambar */
+    .text-content { order: 2; width: 100%; flex: auto; }
+    .img-box { order: 1; }
+    
+    .text-card { padding: 25px; }
+}
+
+@media (max-width: 600px){
+    .section { padding: 60px 15px; }
+    .page-header { padding: 120px 15px 40px; }
+    h2 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <h1>Sejarah Peradaban Islam</h1>
+    
+    <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <div class="nav-links-container" id="navLinks">
+        <div class="nav-links nav-utility">
+            <a href="index.html#home">Home</a>
+            <a href="timeline.html">Timeline</a>
+            <a href="index.html#peta">Peta</a>
+        </div>
+    
+        <div class="nav-links nav-content">
+            <a href="#section-1">1. Kondisi Arab</a>
+            <a href="#section-2">2. Kelahiran</a>
+            <a href="#section-3">3. Remaja</a>
+            <a href="#section-4">4. Al-Amin</a>
+        </div>
+    </div>
+</nav>
+
+<header id="home" class="page-header reveal">
+    <p style="color:var(--gold); font-weight:600; letter-spacing:2px; margin-bottom:10px;">BAGIAN A</p>
+    <h2>Era Pra-Kenabian (570 – 610 M)</h2>
+    <p>Menelusuri jejak sejarah dan kondisi sosial Jazirah Arab sebelum cahaya Islam menerangi dunia, serta masa pembentukan karakter Nabi Muhammad ﷺ.</p>
+</header>
+
+<section id="section-1" class="section">
+    <div class="section-inner row">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>1. Kondisi Jazirah Arab Sebelum Islam</h3>
+                
+                <div class="sub-section">
+                    <h4>A. Kondisi Politik</h4>
+                    <p>Pada abad ke-6 M, Jazirah Arab bukanlah wilayah dengan pemerintahan terpusat. Masyarakat hidup dalam sistem <strong>qabīlah (kesukuan)</strong> yang kuat.</p>
+                    <ul>
+                        <li>Tiap suku (seperti Quraisy, Bani Tamim, Bani Aus) memiliki hukum adat (<em>‘urf</em>) sendiri.</li>
+                        <li>Fanatisme kesukuan (<strong>‘ashabiyah</strong>) sangat tinggi, sering memicu perang antarsuku yang panjang.</li>
+                        <li>Suku Quraisy di Mekah memegang peran sentral sebagai penjaga Ka'bah, membuat mereka dihormati dan Mekah menjadi zona aman. </li>
+                    </ul>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Kondisi Sosial</h4>
+                    <p>Masyarakat Arab memiliki struktur sosial yang tegas namun problematik. Sisi gelap moralitas merajalela:</p>
+                    <ul>
+                        <li>Perjudian, minuman keras, dan perzinaan adalah hal umum.</li>
+                        <li>Praktik <strong>wa’d</strong> (mengubur bayi perempuan hidup-hidup) karena dianggap aib.</li>
+                        <li>Perbudakan tanpa aturan kemanusiaan.</li>
+                    </ul>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Kondisi Ekonomi & Agama</h4>
+                    <p>Mekah adalah jalur strategis perdagangan internasional. Quraisy terkenal dengan dua perjalanan dagang: <em>Rihlah asy-Syita’</em> (ke Yaman saat musim dingin) dan <em>Rihlah ash-Shayf</em> (ke Syam saat musim panas).</p>
+                    <p>Secara agama, ajaran Tauhid Nabi Ibrahim telah tercemar menjadi <strong>penyembahan berhala</strong> (Hubal, Latta, Uzza). Namun, masih ada segelintir kaum <strong>Hanif</strong> yang tetap memegang teguh ajaran lurus Ibrahim.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="Alur Perjalanan para Pedagang Arab dalam Berdakwah di Indonesia.jpg" alt="Ilustrasi Jalur Perdagangan Kuno">
+            </div>
+            <div class="img-caption">Ilustrasi jalur perdagangan kuno yang melintasi gurun pasir Arab.</div>
+            <br>
+            <div class="img-frame">
+                <img src="pemandangan-kota-makkah-pada-abad-ke-11-masehi-_180916235514-389.jpg">
+            </div>
+            <div class="img-caption">Ka'bah sebagai pusat spiritual bangsa Arab sejak masa Nabi Ibrahim.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-2" class="section">
+    <div class="section-inner row rev">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>2. Kelahiran Nabi Muhammad ﷺ & Masa Kecil</h3>
+
+                <div class="sub-section">
+                    <h4>A. Tahun Gajah & Kelahiran Yatim</h4>
+                    <p>Nabi Muhammad ﷺ lahir pada <strong>12 Rabi’ul Awwal Tahun Gajah (570 M)</strong>. Tahun ini dinamai demikian karena peristiwa penyerangan Ka'bah oleh pasukan bergajah Raja Abrahah dari Yaman yang gagal total karena pertolongan Allah (dikirimnya burung Ababil, dijelaskan dalam Surah Al-Fil).</p>
+                    <p>Beliau lahir dalam keadaan <strong>yatim</strong>; ayahnya, Abdullah, wafat saat beliau masih dalam kandungan. Ibunya, Aminah, memberinya nama "Muhammad" (Yang Terpuji), sebuah nama yang belum lazim di kalangan Arab saat itu. </p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Masa Penyusuan di Bani Sa’ad</h4>
+                    <p>Sesuai tradisi bangsawan Arab, Muhammad kecil disusukan di pedalaman gurun agar tumbuh sehat, fasih berbahasa Arab murni, dan jauh dari penyakit kota. <strong>Halimah as-Sa’diyah</strong> menjadi ibu susuannya.</p>
+                    <p>Kehadiran Muhammad membawa berkah luar biasa bagi keluarga Halimah: ternak menjadi gemuk, air susu melimpah, dan rezeki bertambah. Beliau tinggal di sana hingga usia sekitar 4-5 tahun.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>C. Duka Beruntun: Ibu & Kakek</h4>
+                    <p>Pada usia 6 tahun, saat perjalanan pulang dari ziarah makam ayahnya di Madinah, ibunya Aminah wafat di Abwa’. Muhammad pun menjadi <strong>yatim piatu</strong>.</p>
+                    <p>Beliau kemudian diasuh kakeknya, <strong>Abdul Muthalib</strong>, yang sangat mencintainya. Namun, perlindungan itu singkat; sang kakek wafat saat Muhammad berusia 8 tahun. Pengasuhan beralih ke pamannya, <strong>Abu Thalib</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="kisah-ketakutan-kaum-quraisy-menyaksikan-kakbah-yang-rapuh-dan-nyaris-runtuh-xyc.webp" alt="Ilustrasi Mekah Kuno">
+            </div>
+            <div class="img-caption">Ilustrasi suasana kota Mekah kuno, tempat kelahiran Nabi.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-3" class="section">
+    <div class="section-inner row">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>3. Remaja hingga Pernikahan</h3>
+
+                <div class="sub-section">
+                    <h4>A. Remaja yang Terjaga (Ma'shum) 🛡️</h4>
+                    <p>Di bawah asuhan Abu Thalib yang sederhana namun penuh kasih, Muhammad tumbuh berbeda dari pemuda Mekah lainnya. Allah menjaganya dari perilaku Jahiliyah. Beliau tidak pernah menyentuh berhala, tidak minum khamar, dan tidak berjudi.</p>
+                    <p>Beliau bekerja <strong>menggembala kambing</strong>, sebuah profesi para nabi yang melatih kesabaran, kepedulian, dan rasa tanggung jawab.</p>
+                </div>
+
+                <div class="sub-section">
+                    <h4>B. Perjalanan Dagang & Pernikahan 💍</h4>
+                    <p>Menginjak dewasa, beliau ikut pamannya berdagang ke Syam. Reputasinya sebagai pedagang yang <strong>jujur</strong> (tidak menipu timbangan, tidak menyembunyikan cacat barang) sampai ke telinga <strong>Khadijah binti Khuwailid</strong>, wanita bangsawan kaya raya.</p>
+                    <p>Khadijah mempercayakan modal dagangnya kepada Muhammad. Keuntungan besar dan laporan kejujuran dari pembantu Khadijah (Maisarah) membuat Khadijah kagum. Mereka menikah saat Nabi berusia 25 tahun dan Khadijah 40 tahun. Rumah tangga ini menjadi pilar ketenangan utama bagi Nabi.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="The_Camel_Train.jpg" alt="Ilustrasi Kafilah Dagang">
+            </div>
+            <div class="img-caption">Kafilah dagang melintasi gurun pasir, rute perdagangan kuno antara Mekah dan Syam.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section id="section-4" class="section">
+    <div class="section-inner row rev">
+        <div class="text-content reveal">
+            <div class="text-card">
+                <h3>4. Gelar Al-Amin & Peristiwa Hajar Aswad</h3>
+                
+                <p>Integritas Muhammad ﷺ diakui kawan maupun lawan. Penduduk Mekah memberinya gelar <strong>Al-Amin</strong> (Orang yang Sangat Terpercaya). Tidak ada yang ragu menitipkan harta benda berharga kepadanya.</p>
+                
+                <div class="sub-section">
+                    <h4>Resolusi Konflik Hajar Aswad 🕊️</h4>
+                    <p>Saat renovasi Ka'bah (usia Nabi ±35 tahun), terjadi pertikaian hebat antar kepala suku mengenai siapa yang berhak meletakkan kembali <em>Hajar Aswad</em>. Pertumpahan darah mengancam.</p>
+                    <p>Mereka sepakat menunjuk orang pertama yang masuk gerbang masjid sebagai hakim, dan orang itu adalah Muhammad. Solusi beliau sangat jenius dan adil:</p>
+                    <ul>
+                        <li>Beliau membentangkan kain sorban.</li>
+                        <li>Hajar Aswad diletakkan di tengah kain.</li>
+                        <li>Setiap kepala suku diminta memegang ujung kain dan mengangkatnya bersama-sama.</li>
+                        <li>Nabi kemudian mengambil batu itu dengan tangannya sendiri dan meletakkannya di dinding Ka'bah. </li>
+                    </ul>
+                    <p>Semua pihak merasa dihormati, dan pertumpahan darah berhasil dicegah.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="img-box reveal">
+            <div class="img-frame">
+                <img src="sejarah-hajar-aswadjpg-20231230110856.webp" alt="Hajar Aswad">
+            </div>
+            <div class="img-caption">Hajar Aswad di sudut Ka'bah, batu yang dihormati dan dipindahkan dengan kebijaksanaan Nabi.</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider reveal"></div>
+
+<section class="section" style="text-align:center; padding-bottom: 100px;">
+    <div class="section-inner" style="justify-content:center;">
+        <div class="text-card reveal" style="max-width:800px; border-color: var(--gold);">
+            <h3 style="margin-bottom:20px;">Penutup Bagian A</h3>
+            <p style="font-size:1.1rem;">
+                Era pra-kenabian adalah masa <em>I'dad</em> (persiapan). Kerasnya gurun, status yatim, pekerjaan menggembala, dan interaksi dagang adalah kurikulum Ilahi untuk membentuk mental baja seorang Nabi terakhir. Di tengah kegelapan moral Jahiliyah, Allah telah menyiapkan sebuah pelita yang sebentar lagi akan bersinar terang.
+            </p>
+            <div style="margin-top:30px; font-family:'Cinzel', serif; color:var(--gold);">
+                — Bersambung ke Masa Kenabian pada Periode Mekah —
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p style="text-align:center; padding: 20px 0; font-size: 0.85rem; color: rgba(255,255,255,0.4);">&copy; Sejarah Peradaban Islam</p>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- 1. LOGIKA MENU MOBILE (HAMBURGER) ---
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    if(navToggle && navLinks) {
+        // Toggle menu saat icon hamburger diklik
+        navToggle.addEventListener('click', function(){
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+        
+        // Tutup menu otomatis saat salah satu link diklik
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(){
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Tutup menu jika klik di luar area menu
+        document.addEventListener('click', function(event){
+            if (!navLinks.contains(event.target) && !navToggle.contains(event.target) && navLinks.classList.contains('active')) {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+    }
+
+    // --- 2. INTERSECTION OBSERVER FOR ANIMATION ---
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.15 
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); // Hanya muncul sekali
+            }
+        });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
+    
+    // --- 3. SMOOTH SCROLL ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            // Hanya target ID di halaman ini
+            if(href.startsWith('#') && href.length > 1) {
+                const targetEl = document.querySelector(href);
+                if(targetEl) {
+                    e.preventDefault();
+                    // Offset dikit buat kompensasi navbar fixed
+                    const headerOffset = 80;
+                    const elementPosition = targetEl.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

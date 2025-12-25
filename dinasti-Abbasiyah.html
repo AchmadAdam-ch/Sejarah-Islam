@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Golden Age — Sejarah Peradaban Islam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--gold: #d4af37;
+--green-dark: #063a2f;
+--green-deep: #031b14;
+--green-mid: #0b6b4b;
+--text: #e0e0e0;
+--card-bg: rgba(6, 58, 47, 0.45);
+--border: rgba(212, 175, 55, 0.15);
+--radius: 16px;
+}
+/* Reset & Basic */
+*{box-sizing:border-box}
+html{scroll-behavior: smooth;}
+body{
+margin:0;
+font-family: 'Inter', sans-serif;
+background: linear-gradient(180deg, var(--green-dark) 0%, var(--green-deep) 100%);
+color: var(--text);
+line-height: 1.7;
+overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: "Cinzel", serif; color: var(--gold); margin-top: 0; }
+/* Fluid Typography */
+h2 { font-size: clamp(2rem, 5vw, 3rem); }
+h3 { font-size: clamp(1.4rem, 4vw, 2rem); }
+h4 { color: #fff; font-size: 1.2rem; margin-bottom: 12px; border-left: 3px solid var(--gold); padding-left: 12px; }
+p { margin-bottom: 1.2em; }
+ul { margin-bottom: 1.2em; padding-left: 20px; }
+li { margin-bottom: 8px; }
+/* --- NAVBAR STYLES --- */
+nav {
+position:fixed; left:0; right:0; top:0;
+display:flex;
+align-items:center;
+justify-content: space-between;
+padding: 0 30px;
+background: rgba(3, 27, 20, 0.95);
+backdrop-filter: blur(10px);
+border-bottom: 1px solid var(--border);
+z-index: 100;
+transition: all 0.3s ease;
+height: 70px;
+}
+nav h1{ margin:0; font-size: 1.125rem; letter-spacing: 1px; }
+/* Hamburger Menu Icon (Hidden on Desktop) */
+.nav-toggle {
+display: none; /* Default hidden */
+flex-direction: column;
+gap: 5px;
+cursor: pointer;
+padding: 8px;
+}
+.nav-toggle span {
+width: 25px; height: 3px;
+background: var(--gold);
+border-radius: 2px;
+transition: all 0.3s ease;
+}
+/* Animasi Hamburger menjadi X */
+.nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.nav-toggle.active span:nth-child(2) { opacity: 0; }
+.nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+.nav-links-container {
+display: flex;
+gap: 30px;
+align-items: center;
+}
+.nav-links {
+display:flex;
+gap: 20px;
+align-items: center;
+}
+.nav-links a {
+color: var(--text);
+text-decoration:none;
+font-size: 0.875rem;
+transition: color 0.3s;
+padding: 5px 0;
+position: relative;
+white-space: nowrap;
+}
+.nav-links a:hover{ color: var(--gold); }
+/* Utility Links Decoration */
+.nav-utility a { font-weight: 600; color: rgba(255, 255, 255, 0.6); font-family: 'Cinzel', serif; }
+.nav-utility a:hover { color: var(--gold); }
+.nav-utility a::after {
+content: ''; position: absolute; bottom: -5px; left: 0;
+width: 100%; height: 2px; background-color: var(--gold);
+transform: scaleX(0); transition: transform 0.3s ease;
+}
+.nav-utility a:hover::after { transform: scaleX(1); }
+/* --- RESPONSIVE NAVBAR (Mobile Logic - Tampilan Grid) --- */
+@media (max-width: 960px) {
+  nav { padding: 0 20px; }
+  
+  .nav-toggle { display: flex; } 
+
+  .nav-links-container {
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      /* Batasi tinggi container agar sisa layar bisa di-scroll jika perlu */
+      max-height: calc(100vh - 70px); 
+      overflow-y: auto; /* Jaga-jaga jika layar HP sangat pendek */
+      
+      background: rgba(3, 27, 20, 0.98);
+      border-bottom: 1px solid var(--border);
+      
+      flex-direction: column;
+      align-items: stretch; /* Agar lebar penuh */
+      padding: 20px;
+      gap: 25px;
+      
+      transform: translateY(-150%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .nav-links-container.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+  }
+
+  /* UTILITY LINKS (Home, Timeline, Peta) - Tetap Baris tapi dipusatkan */
+  .nav-utility { 
+      order: 1; 
+      display: flex;
+      flex-direction: row; /* Jejer ke samping */
+      justify-content: center;
+      gap: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3); /* Garis pemisah gold */
+  }
+
+  /* CONTENT LINKS (Bab 1-9) - JADI GRID */
+  .nav-content { 
+      order: 2; 
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 Kolom */
+      gap: 10px;
+      width: 100%;
+  }
+
+  /* Styling Tombol Grid */
+  .nav-content a {
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 12px 5px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      transition: all 0.2s ease;
+      white-space: normal; /* Agar teks panjang bisa turun baris */
+      line-height: 1.3;
+  }
+
+  /* Efek Hover di HP */
+  .nav-content a:active, .nav-content a:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: scale(0.98);
+  }
+
+  /* Utility links styling override */
+  .nav-utility a {
+      font-size: 1rem;
+      padding: 5px;
+  }
+
+    
+    /* Order utility links to bottom on mobile */
+    .nav-utility { order: 2; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; margin-top: 10px; }
+    .nav-content { order: 1; }
+}
+/* --- HERO & LAYOUT --- */
+.page-header{
+padding: 140px 20px 60px;
+text-align: center;
+max-width: 900px;
+margin: 0 auto;
+position: relative;
+z-index: 2;
+}
+.page-header h2{ margin-bottom: 16px; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.page-header p{ font-size: 1.1rem; opacity: 0.9; }
+.section{
+padding: 80px 20px;
+position: relative;
+overflow: hidden;
+}
+.section-inner{
+max-width: 1200px;
+margin: 0 auto;
+display: flex;
+align-items: flex-start;
+gap: 50px;
+flex-wrap: wrap;
+position: relative;
+z-index: 2;
+}
+/* Divider Style */
+.divider {
+width: 60%; max-width: 800px; height: 1px;
+background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+margin: 0 auto; opacity: 0.5; position: relative;
+}
+.divider::after {
+content: ''; position: absolute; top: 50%; left: 50%;
+transform: translate(-50%, -50%); width: 10px; height: 10px;
+background-color: var(--gold); border-radius: 50%; box-shadow: 0 0 8px var(--gold);
+}
+/* Content Cards */
+.text-content{ flex: 1 1 550px; } /* Basis lebar text */
+.text-card{
+background: var(--card-bg);
+border: 1px solid var(--border);
+padding: 40px;
+border-radius: var(--radius);
+box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+position: relative;
+backdrop-filter: blur(5px);
+}
+.text-card::before {
+content: ''; position: absolute; top:0; left:0; right:0; height: 4px;
+background: linear-gradient(90deg, transparent, var(--gold), transparent);
+opacity: 0.5;
+}
+.sub-section { margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+.sub-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.lesson-table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
+}
+.lesson-table th, .lesson-table td {
+padding: 10px 15px;
+border: 1px solid rgba(255, 255, 255, 0.1);
+text-align: left;
+}
+.lesson-table th {
+background-color: var(--green-mid);
+color: #fff;
+font-weight: 700;
+font-family: 'Cinzel', serif;
+}
+.lesson-table tr:nth-child(even) {
+background-color: rgba(0, 0, 0, 0.1);
+}
+/* Image Box */
+.img-box{
+flex: 0 0 400px;
+position: sticky;
+top: 100px;
+transition: all 0.3s;
+}
+.img-frame{
+width: 100%; border-radius: var(--radius); overflow: hidden;
+box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+border: 1px solid var(--border); background: #000;
+}
+.img-frame img{
+width: 100%; height: auto; display: block;
+opacity: 0.8; transition: opacity 0.5s;
+}
+.img-caption {
+font-size: 0.85rem; color: rgba(255,255,255,0.5);
+margin-top: 10px; text-align: center; font-style: italic;
+}
+.row { display: flex; gap: 50px; width: 100%; }
+.row.rev { flex-direction: row-reverse; }
+/* Animations */
+.reveal {
+opacity: 0; transform: translateY(40px);
+transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+/* --- RESPONSIVE LAYOUT (Content) --- */
+@media (max-width: 960px){
+.row, .row.rev { flex-direction: column; }
+.img-box {
+flex: auto; width: 100%;
+position: static;
+margin-bottom: 40px;
+}
+.text-content { order: 2; width: 100%; flex: auto; }
+.img-box { order: 1; }
+.text-card { padding: 25px; }
+}
+@media (max-width: 600px){
+.section { padding: 60px 15px; }
+.page-header { padding: 120px 15px 40px; }
+h2 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+<nav>
+<h1>Sejarah Peradaban Islam</h1>
+<div class="nav-toggle" id="navToggle">
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="nav-links-container" id="navLinks">
+<div class="nav-links nav-utility">
+<a href="index.html#home">Home</a>
+<a href="timeline.html">Timeline</a>
+<a href="index.html#peta">Peta</a>
+</div>
+<div class="nav-links nav-content">
+<a href="#section-1">1. Pondasi Ilmu</a>
+<a href="#section-2">2. Baitul Hikmah</a>
+<a href="#section-3">3. Ilmuwan Besar</a>
+<a href="#section-4">4. Fragmentasi</a>
+<a href="#section-5">5. Tragedi 1258</a>
+</div>
+</div>
+</nav>
+<header id="home" class="page-header reveal">
+<p style="color:var(--gold); font-weight:600; letter-spacing:2px; margin-bottom:10px;">BAGIAN F : MASA KEEMASAN (THE GOLDEN AGE)</p>
+<h2>Daulah Abbasiyah & Revolusi Intelektual</h2>
+<p>Era cemerlang Islam (± abad ke-8 – pertengahan abad ke-13 M) yang ditandai dengan ledakan sains, filsafat, dan peradaban yang menjadi jembatan bagi Renaisans Eropa.</p>
+</header>
+<section id="section-1" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>1. Pondasi Keilmuan Islam</h3>
+<div class="sub-section">
+<h4>A. Spirit Wahyu dan Akal (Iqra')</h4>
+<p>Islam sejak awal menekankan kesatuan antara iman dan rasio. Wahyu pertama, <strong>"Iqra'"</strong> (bacalah/telitilah), menjadi landasan gerakan intelektual. Al-Qur'an dipenuhi dengan seruan <strong>"afala ta‘qilun"</strong> (tidakkah kalian berpikir) dan <strong>"afala tatafakkarun"</strong>, mendorong umat untuk menggunakan akal.</p>
+</div>
+<div class="sub-section">
+<h4>B. Tahap Awal Perkembangan</h4>
+<p>Pada masa Nabi Muhammad ﷺ, penekanan pada literasi (seperti tawanan Badar yang mengajar baca-tulis). Pada masa Khulafaur Rasyidin, terjadi <strong>kodifikasi Al-Qur'an</strong> yang menumbuhkan disiplin teks. Dinasti Umayyah memulai administrasi, mata uang, dan awal <strong>penerjemahan</strong>, namun ledakan ilmu terjadi di masa Abbasiyah.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="IMG_0007-1719856139.webp" alt="Ilustrasi Perpustakaan Kuno">
+</div>
+<div class="img-caption">Semangat "Iqra" menjadi ruh peradaban yang mendorong literasi dan riset ilmiah di seluruh wilayah Islam.</div>
+</div>
+</div>
+</section>
+<div class="divider reveal"></div>
+<section id="section-2" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>2. Dinasti Abbasiyah & Baitul Hikmah</h3>
+<div class="sub-section">
+<h4>A. Revolusi dan Kosmopolitanisme Baghdad (750 M)</h4>
+<p>Setelah Revolusi Abbasiyah, ibu kota dipindah dari Damaskus ke <strong>Baghdad</strong> . Kota ini menjadi lebih kosmopolitan dan terbuka terhadap warisan intelektual dari <strong>Persia, Yunani, India, dan Romawi Timur</strong>. Kekhalifahan tidak anti-ilmu asing, melainkan bertujuan <strong>mengislamkan ilmu</strong> melalui kritisisme rasional.</p>
+</div>
+<div class="sub-section">
+<h4>B. Baitul Hikmah (Bayt al-Ḥikmah)</h4>
+<p>Didirikan pada masa <strong>Harun ar-Rasyid</strong> dan mencapai puncak kejayaan di masa putranya, <strong>Al-Ma’mun</strong>. Institusi ini berfungsi sebagai:</p>
+<ul>
+<li>Pusat penerjemahan terbesar di dunia.</li>
+<li>Observatorium dan pusat riset sains.</li>
+<li>Akademi lintas agama (Muslim, Kristen Nestorian, Yahudi).</li>
+</ul>
+</div>
+<div class="sub-section">
+<h4>C. Gerakan Penerjemahan Akbar</h4>
+<p>Terjadi proyek penerjemahan masif karya-karya kuno (Plato, Aristoteles, Galen, Euclid) ke dalam Bahasa Arab. Uniknya, naskah yang diterjemahkan kemudian <strong>dikritik dan dikembangkan</strong>, bukan diimani mentah-mentah, melahirkan ilmu pengetahuan baru.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="baitul-hikmah.jpeg" alt="Ilustrasi Baitul Hikmah">
+</div>
+<div class="img-caption">Baitul Hikmah: Simbol keunggulan intelektual Islam yang menyatukan sarjana dari berbagai latar belakang untuk ilmu pengetahuan. </div>
+</div>
+</div>
+</section>
+<div class="divider reveal"></div>
+<section id="section-3" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>3. Para Raksasa Ilmu (Abad 9–11 M)</h3>
+<div class="sub-section">
+<h4>A. Al-Khawarizmi: Bapak Aljabar</h4>
+<p>Muhammad ibn Musa <strong>Al-Khawarizmi</strong> (w. ±850 M) menulis <em>Al-Kitab al-Mukhtashar fi Hisab al-Jabr wal-Muqabalah</em>. Ia memperkenalkan <strong>Aljabar</strong> sebagai disiplin mandiri, dan juga sistem <strong>Angka Hindu-Arab</strong> (termasuk nol) ke dunia Barat. Kata <strong>"Algorithm"</strong> berasal dari namanya. Kontribusinya adalah pondasi bagi kalkulus dan komputasi modern.</p>
+</div>
+<div class="sub-section">
+<h4>B. Ibnu Sina (Avicenna): Raksasa Kedokteran & Filsafat</h4>
+<p><strong>Ibnu Sina</strong> (980–1037 M) menghasilkan karya monumental <em>Al-Qanun fi al-Tibb</em> (The Canon of Medicine), yang menjadi buku teks medis standar di Eropa hingga abad ke-17. Ia memelopori sistem rekam medis dan praktik bedah. Dalam filsafat, ia merumuskan argumen <strong>Wajib al-Wujud</strong> dan membedakan Esensi (hakikat) dari Eksistensi (keberadaan), menyajikan konsep Tuhan yang paling matang secara rasional dalam sejarah Islam.</p>
+</div>
+<div class="sub-section">
+<h4>C. Filsafat dan Sains Eksakta</h4>
+<ul>
+<li><strong>Al-Kindi</strong> (Filsuf Muslim pertama): Mengharmoniskan wahyu dan akal, menegaskan akal adalah alat memahami ciptaan, bukan menggantikan Tuhan.</li>
+<li><strong>Al-Farabi</strong> (Guru Kedua): Mengembangkan logika formal dan teori negara utama <em>Al-Madinah al-Fadhilah</em>.</li>
+<li><strong>Jabir ibn Hayyan</strong>: Bapak kimia modern, pionir <strong>distilasi</strong> dan <strong>asam</strong>, menegaskan ilmu harus berbasis eksperimen dan observasi, bukan spekulasi. </li>
+</ul>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="file-20200727-19-1hhmlfv.avif" alt="Manuskrip Ibnu Sina">
+</div>
+<div class="img-caption">Ilustrasi Anatomi: Menunjukkan kemajuan observasi medis Abbasiyah. Buku Ibnu Sina menjadi standar Eropa selama berabad-abad.</div>
+</div>
+</div>
+</section>
+<div class="divider reveal"></div>
+<section id="section-4" class="section">
+<div class="section-inner row">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>4. Fragmentasi Politik & Puncak Multidisiplin</h3>
+<div class="sub-section">
+<h4>A. Pecahnya Kontrol Pusat</h4>
+<p>Meskipun ilmu mencapai puncak, kontrol politik Abbasiyah di Baghdad melemah sejak abad ke-10 M. Khalifah perlahan menjadi simbol spiritual, sementara kekuasaan militer dan administrasi dipegang oleh dinasti-dinasti lokal (Buwaihi, Seljuk). Namun, ilmu pengetahuan <strong>tetap berkembang</strong>, menunjukkan kuatnya fondasi intelektual Islam.</p>
+</div>
+<div class="sub-section">
+<h4>B. Tiga Kekuatan Utama</h4>
+<p>Dunia Islam terpecah menjadi kekuatan yang saling bersaing, masing-masing dengan pusat ilmu pengetahuannya sendiri:</p>
+<ul>
+<li><strong>Abbasiyah (Sunni) di Baghdad:</strong> Pusat riset dan penerjemahan.</li>
+<li><strong>Fatimiyah (Syiah Ismailiyah) di Kairo:</strong> Mendirikan Universitas Al-Azhar.</li>
+<li><strong>Umayyah (Sunni) di Andalusia:</strong> Menciptakan kejayaan Cordoba yang menyaingi Baghdad. </li>
+</ul>
+</div>
+<div class="sub-section">
+<h4>C. Peran Andalusia (Spanyol Islam)</h4>
+<p>Cordoba dikenal dengan <strong>lampu jalan</strong> dan <strong>perpustakaan ratusan ribu buku</strong>. Ilmuwan seperti <strong>Ibnu Rusyd</strong> dan <strong>Al-Zahrawi</strong> berkarya di sini. Melalui Andalusia, ilmu-ilmu Islam yang terselamatkan dan dikembangkan menjadi jalur utama masuknya pengetahuan kuno dan baru ke Eropa, memicu era Renaisans.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="qik3g2z53uubabrfvpzk5y6vxx6jc3sachvcdoaizecfr3dnitcq_3_0.png" alt="Peta Fragmentasi Abbasiyah">
+</div>
+<div class="img-caption">Peta Politik Abad Pertengahan: Fragmentasi tidak menghentikan kemajuan ilmu, tetapi menciptakan beberapa pusat keunggulan.</div>
+</div>
+</div>
+</section>
+<div class="divider reveal"></div>
+<section id="section-5" class="section">
+<div class="section-inner row rev">
+<div class="text-content reveal">
+<div class="text-card">
+<h3>5. Tragedi Besar: Runtuhnya Baghdad (1258 M)</h3>
+<div class="sub-section">
+<h4>A. Kemunduran Internal dan Eksternal</h4>
+<p>Faktor kemunduran melibatkan konflik politik, fanatisme, dan melemahnya dukungan (patronase) terhadap ilmu pengetahuan. Di tengah perpecahan, Eropa melancarkan Perang Salib. Namun, pukulan fatal datang dari timur.</p>
+</div>
+<div class="sub-section">
+<h4>B. Invasi Hulagu Khan</h4>
+<p>Pada Januari 1258, Bangsa Mongol di bawah pimpinan <strong>Hulagu Khan</strong> (cucu Genghis Khan) mengepung dan menaklukkan Baghdad. . Meskipun Khalifah <strong>Al-Musta'shim Billah</strong> menyerah, pembantaian massal tetap terjadi.</p>
+</div>
+<div class="sub-section">
+<h4>C. Kehancuran Baitul Hikmah dan Akhir Era</h4>
+<p>Perpustakaan <strong>Baitul Hikmah dihancurkan</strong>. Konon, jutaan buku dibuang ke Sungai Tigris hingga airnya menghitam oleh tinta, dan kemudian berubah merah karena darah penduduk yang dibantai. Khalifah dibunuh secara brutal. Jatuhnya Baghdad pada 1258 M bukan hanya kehancuran sebuah kota, tetapi juga <strong>runtuhnya pusat peradaban dunia</strong> dan menutup tirai Masa Keemasan Islam secara tragis.</p>
+</div>
+</div>
+</div>
+<div class="img-box reveal">
+<div class="img-frame">
+<img src="Bagdad1258.jpg" alt="Pengepungan Baghdad">
+</div>
+<div class="img-caption">Pengepungan Baghdad (1258): Titik nadir peradaban Islam klasik, di mana pusat ilmu pengetahuan dunia luluh lantak.</div>
+</div>
+</div>
+</section>
+<div class="divider reveal"></div>
+<section class="section">
+<div class="section-inner" style="justify-content:center;">
+<div class="text-content reveal" style="max-width:900px;">
+<div class="text-card">
+<h3>Kesimpulan Filosofis: Warisan The Golden Age</h3>
+<p>Masa Keemasan Islam membuktikan bahwa <strong>Islam melahirkan sains</strong> dan Tauhid tidak mematikan akal. Peradaban Barat modern berutang besar pada warisan ini. Kemunduran yang terjadi bukan karena Islam itu sendiri, tetapi karena menjauhnya umat dari ruh dasar Islam yang mendorong riset dan rasionalitas.</p>
+<table class="lesson-table">
+<thead>
+<tr>
+<th>Bidang</th>
+<th>Tokoh & Kontribusi Utama</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Matematika</strong></td>
+<td><strong>Al-Khawarizmi:</strong> Bapak Aljabar dan Algoritma; Pengenal Angka Nol (0).</td>
+</tr>
+<tr>
+<td><strong>Kedokteran</strong></td>
+<td><strong>Ibnu Sina (Avicenna):</strong> <em>"Canon of Medicine"</em>, fondasi medis Eropa; <strong>Al-Zahrawi:</strong> Pelopor Bedah.</td>
+</tr>
+<tr>
+<td><strong>Filsafat</strong></td>
+<td><strong>Al-Kindi:</strong> Filsuf Arab pertama; <strong>Al-Farabi:</strong> Guru Kedua Logika; <strong>Ibnu Rusyd:</strong> Komentator Aristoteles.</td>
+</tr>
+<tr>
+<td><strong>Kimia & Fisika</strong></td>
+<td><strong>Jabir Ibn Hayyan:</strong> Bapak Kimia modern (distilasi); <strong>Ibnu Al-Haytham:</strong> Bapak Optik (metode ilmiah).</td>
+</tr>
+</tbody>
+</table>
+<div style="margin-top:30px; font-family:'Cinzel', serif; color:var(--gold); text-align: center;">
+— Warisan Keemasan ini diteruskan oleh Kerajaan-Kerajaan Islam Pertengahan (Mamluk, Safawi, Mughal, Ottoman) —
+</div>
+</div>
+</div>
+</div>
+</section>
+<footer>
+<p style="text-align:center; padding: 20px 0; font-size: 0.85rem; color: rgba(255,255,255,0.4);">&copy; Sejarah Peradaban Islam - The Golden Age</p>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+ 
+  // --- 1. LOGIKA MENU MOBILE (HAMBURGER) ---
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+ 
+  if(navToggle && navLinks) {
+      navToggle.addEventListener('click', function(){
+          navToggle.classList.toggle('active');
+          navLinks.classList.toggle('active');
+      });
+      
+      navLinks.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', function(){
+              navToggle.classList.remove('active');
+              navLinks.classList.remove('active');
+          });
+      });
+ 
+      document.addEventListener('click', function(event){
+          if (!navLinks.contains(event.target) && !navToggle.contains(event.target) && navLinks.classList.contains('active')) {
+              navToggle.classList.remove('active');
+              navLinks.classList.remove('active');
+          }
+      });
+  }
+ 
+  // --- 2. INTERSECTION OBSERVER FOR ANIMATION ---
+  const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15 
+  };
+ 
+  const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+              observer.unobserve(entry.target);
+          }
+      });
+  }, observerOptions);
+ 
+  const revealElements = document.querySelectorAll('.reveal');
+  revealElements.forEach(el => observer.observe(el));
+ 
+  // --- 3. SMOOTH SCROLL ---
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if(href.startsWith('#') && href.length > 1) {
+              const targetEl = document.querySelector(href);
+              if(targetEl) {
+                  e.preventDefault();
+                  const headerOffset = 80;
+                  const elementPosition = targetEl.getBoundingClientRect().top;
+                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+ 
+                  window.scrollTo({
+                      top: offsetPosition,
+                      behavior: "smooth"
+                  });
+              }
+          }
+      });
+  });
+});
+</script>
+
+</body>
+</html>

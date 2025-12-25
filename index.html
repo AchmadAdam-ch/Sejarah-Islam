@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sejarah Peradaban Islam</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+
+    <style>
+        :root{
+            --gold:#d4af37;
+            --green-dark:#063a2f;
+            --green-mid:#0b6b4b;
+            --text:#ffffff;
+            --card:rgba(0,40,25,0.6);
+            --glass: rgba(255,255,255,0.04);
+        }
+
+        /* Reset & Basic */
+        *{box-sizing:border-box}
+        html{scroll-behavior: smooth;}
+        body{
+            margin:0;
+            font-family: 'Inter', sans-serif;
+            background: var(--green-dark);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 { font-family: "Cinzel", serif; color: var(--gold); margin-top: 0; }
+        p { margin-bottom: 1.2em; }
+        ul { margin-bottom: 1.2em; padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        /* NAVBAR - Responsif */
+        nav{
+            position:fixed; 
+            left:0; 
+            right:0; 
+            top:0; 
+            height:70px;
+            display:flex; 
+            align-items:center; 
+            justify-content: space-between; 
+            padding:0 20px;
+            background: rgba(3, 27, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        nav h1{ 
+            margin:0; 
+            font-size: clamp(14px, 4vw, 18px); 
+            letter-spacing: 1px; 
+        }
+        
+        /* Hamburger Menu */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+        
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+        
+        .nav-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .nav-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .nav-links-container {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links{ 
+            display:flex; 
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a{
+            color: var(--text); 
+            text-decoration:none; 
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 5px 0;
+            position: relative;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover{ color: var(--gold); }
+        
+        .nav-utility a {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Cinzel', serif;
+        }
+        
+        .nav-utility a:hover {
+            color: var(--gold);
+        }
+        
+        .nav-utility a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-utility a:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* HERO - Responsif */
+        .hero{
+            min-height:100vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding: clamp(80px, 15vh, 120px) 20px 40px;
+            position:relative;
+            overflow:hidden;
+        }
+        
+        .hero::before{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:url('hero-kaligrafi.jpg') center/cover no-repeat;
+            filter:blur(6px) brightness(0.55);
+            transform:scale(1.03);
+            z-index:-2;
+        }
+        
+        .hero::after{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(180deg, rgba(6,58,47,0.55), rgba(11,107,75,0.55));
+            z-index:-1;
+        }
+        
+        .hero-title{
+            font-family:"Cinzel",serif;
+            font-size: clamp(32px, 8vw, 56px);
+            color:var(--gold);
+            margin:0;
+            text-shadow:0 6px 22px rgba(0,0,0,0.55);
+        }
+        
+        .hero-sub{
+            max-width:760px;
+            margin-top:12px;
+            font-size: clamp(16px, 3vw, 18px);
+            opacity:0.95;
+            padding: 0 10px;
+        }
+        
+        .actions{
+            margin-top:26px;
+            display:flex;
+            gap:14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn{
+            padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 20px);
+            border-radius:12px;
+            background:var(--gold);
+            color:#000;
+            text-decoration:none;
+            font-weight:700;
+            font-size: clamp(13px, 2.5vw, 15px);
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212,175,55,0.4);
+        }
+        
+        .btn.outline{
+            background:transparent;
+            border:2px solid var(--gold);
+            color:var(--gold);
+        }
+
+        /* Timeline - Responsif */
+        #timeline{
+            padding: clamp(40px, 10vw, 80px) 18px clamp(60px, 12vw, 100px);
+            background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.28));
+        }
+        
+        .timeline-title{
+            font-family:"Cinzel",serif;
+            font-size: clamp(24px, 5vw, 32px);
+            color:var(--gold);
+            text-align:center;
+            margin-bottom:24px;
+        }
+        
+        .timeline-wrap{
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap:18px;
+            padding:20px 12px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .event-card{
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+            padding:18px;
+            border-radius:14px;
+            background:var(--card);
+            box-shadow:0 10px 30px rgba(0,0,0,0.35);
+            cursor:pointer;
+            transition:transform .28s ease,box-shadow .28s ease;
+        }
+        
+        .event-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 18px 40px rgba(0,0,0,0.5);
+        }
+        
+        .event-icon{
+            width:56px;
+            height:56px;
+            border-radius:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(255,255,255,0.06);
+            margin-bottom:12px;
+        }
+        
+        .event-icon svg{
+            width:34px;
+            height:34px;
+            fill:var(--gold);
+        }
+        
+        .event-card h3{
+            margin:0 0 6px;
+            font-family:"Cinzel",serif;
+            color:var(--gold);
+            font-size: clamp(16px, 3vw, 18px);
+        }
+        
+        .event-card p{
+            margin:0;
+            color:rgba(255,255,255,0.9);
+            font-size: clamp(13px, 2.5vw, 14px);
+        }
+
+        /* Map - Responsif */
+        #peta{
+            padding: clamp(40px, 8vw, 60px) 18px;
+            background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+        }
+        
+        #map{
+            height: clamp(300px, 50vh, 420px);
+            border-radius:12px;
+            box-shadow:0 18px 40px rgba(0,0,0,0.45);
+            overflow:hidden;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Modal - Responsif */
+        .modal{
+            position:fixed;
+            inset:0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:rgba(0,0,0,0.6);
+            visibility:hidden;
+            opacity:0;
+            transition:all .25s ease;
+            padding: 20px;
+            z-index: 200;
+        }
+        
+        .modal.open{
+            visibility:visible;
+            opacity:1;
+        }
+        
+        .modal-card{
+            background:linear-gradient(180deg,#072b21,#063a2f);
+            padding: clamp(18px, 4vw, 22px);
+            border-radius:12px;
+            max-width:760px;
+            width:100%;
+            color:var(--text);
+            box-shadow:0 30px 60px rgba(2,8,10,0.6);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-card h4{
+            margin:0 0 8px;
+            color:var(--gold);
+            font-size: clamp(18px, 4vw, 22px);
+        }
+        
+        .modal-card p{
+            font-size: clamp(14px, 2.5vw, 16px);
+        }
+        
+        .modal-close{
+            float:right;
+            background:transparent;
+            border:0;
+            color:rgba(255,255,255,0.7);
+            cursor:pointer;
+            font-size: clamp(20px, 4vw, 24px);
+            padding: 5px 10px;
+        }
+
+        /* Animations */
+        .animate{
+            opacity:0;
+            transform:translateY(24px) scale(0.995);
+            transition:opacity .7s ease,transform .7s cubic-bezier(.2,.9,.3,1);
+        }
+        
+        .in-view{
+            opacity:1;
+            transform:translateY(0) scale(1);
+        }
+
+        .slide{
+            opacity:0;
+            transform:translateX(40px);
+            transition:all .7s ease;
+        }
+        
+        .slide.in-view{
+            opacity:1;
+            transform:translateX(0);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px){
+            nav {
+                padding: 0 15px;
+            }
+            
+            .nav-toggle {
+                display: flex;
+            }
+            
+            .nav-links-container {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(3, 27, 20, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                border-bottom: 1px solid rgba(212,175,55,0.2);
+            }
+            
+            .nav-links-container.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+            
+            .nav-links a {
+                font-size: 16px;
+                padding: 10px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .timeline-wrap {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            
+            .event-card {
+                width: 100%;
+            }
+            
+            .hero {
+                padding-top: 100px;
+            }
+        }
+
+        @media (max-width: 480px){
+            nav h1 {
+                font-size: 14px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .modal-card {
+                margin: 10px;
+            }
+        }
+
+        /* Landscape mobile optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                min-height: auto;
+                padding: 100px 20px 40px;
+            }
+            
+            nav {
+                height: 60px;
+            }
+            
+            .nav-links-container {
+                top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>Sejarah Peradaban Islam</h1>
+        <div class="nav-toggle" id="navToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links-container" id="navLinks">
+            <div class="nav-links nav-utility">
+                <a href="#home" data-anchor>Home</a>
+                <a href="timeline.html" data-anchor>Timeline</a>
+                <a href="#peta" data-anchor>Peta</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero animate">
+        <h1 class="hero-title">Sejarah Peradaban Islam</h1>
+        <p class="hero-sub">Dari Nabi Muhammad hingga Kejayaan Dinasti Abbasiyah</p>
+        <div class="actions">
+           
+            <a class="btn" href="timeline.html" data-anchor>Mulai Timeline</a>
+            <a class="btn outline" href="#peta" data-anchor>Peta Interaktif</a>
+      
+     </div>
+    </section>
+
+    <section id="timeline" class="animate">
+        <h2 class="timeline-title">Timeline Peradaban</h2>
+        <div class="timeline-wrap">
+
+            <div class="event-card" data-title="Pra-Kenabian" data-desc="Kondisi Jazirah Arab sebelum Islam: sistem klan, kepercayaan politeistik, dan faktor sosial-ekonomi yang memengaruhi kelahiran kenabian.">
+                <div class="event-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M3 6l7-3 7 3 4-1v12l-4 1-7-3-7 3V6z"/></svg>
+                </div>
+                <h3>Pra-Kenabian</h3>
+                <p>Keadaan sosial & budaya Jazirah Arab.</p>
+            </div>
+
+            <div class="event-card" data-title="Mekah" data-desc="Turunnya wahyu pertama, dakwah awal, penentangan Quraisy dan peristiwa penting seperti Isra' Mi'raj.">
+                <div class="event-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M3 6l9-4 9 4v12l-9 4-9-4V6z"/></svg>
+                </div>
+                <h3>Mekah</h3>
+                <p>Wahyu, dakwah, dan ujian awal.</p>
+            </div>
+
+            <div class="event-card" data-title="Madinah" data-desc="Piagam Madinah, pertempuran besar (Badar, Uhud, Khandaq), dan awal pembentukan negara Islam.">
+                <div class="event-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M12 2l8 6v10H4V8l8-6z"/></svg>
+                </div>
+                <h3>Madinah</h3>
+                <p>Pendirian komunitas & peperangan penting.</p>
+            </div>
+
+            <div class="event-card" data-title="Khulafaur Rasyidin" data-desc="Kepemimpinan Abu Bakar, Umar, Utsman, dan Ali; ekspansi awal dan isu-isu internal umat.">
+                <div class="event-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M2 7l5 5 4-6 4 6 5-5v10H2V7z"/></svg>
+                </div>
+                <h3>Khulafaur Rasyidin</h3>
+                <p>Pemimpin awal & ekspansi.</p>
+            </div>
+
+            <div class="event-card" data-title="Umayyah" data-desc="Dinasti pertama setelah Khulafaur Rasyidin: administrasi terpusat, ekspansi luas hingga Iberia dan Asia Tengah.">
+                <div class="event-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M2 21l21-21 1 1-21 21H2v-1z"/></svg>
+                </div>
+                <h3>Umayyah</h3>
+                <p>Ekspansi & pemerintahan terpusat.</p>
+            </div>
+
+            <div class="event-card" data-title="Abbasiyah" data-desc="Masa keemasan ilmu pengetahuan: Baitul Hikmah, penerjemahan, serta tokoh-tokoh besar di berbagai bidang ilmu.">
+                <div class="event-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M3 4h14v16H3zM17 4h2v16h-2z"/></svg>
+                </div>
+                <h3>Abbasiyah</h3>
+                <p>Kejayaan ilmu & budaya.</p>
+            </div>
+
+
+        </div>
+    </section>
+
+    <section id="peta" class="animate">
+        <h2 class="timeline-title">Peta Interaktif - Ekspansi & Titik Penting</h2>
+        <div id="map"></div>
+    </section>
+
+    <div class="modal" id="modal">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="modal-close" id="closeModal" aria-label="Tutup">✕</button>
+            <h4 id="modalTitle"></h4>
+            <p id="modalDesc"></p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script>
+        // Mobile Navigation Toggle
+        (function(){
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if(navToggle && navLinks) {
+                navToggle.addEventListener('click', function(){
+                    navToggle.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+                
+                // Close menu when link clicked
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function(){
+                        navToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
+        })();
+
+        // Modal for timeline cards
+        (function(){
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDesc = document.getElementById('modalDesc');
+            const closeBtn = document.getElementById('closeModal');
+
+            document.querySelectorAll('.event-card').forEach(card=>{
+                card.addEventListener('click', ()=>{
+                    if(modalTitle && modalDesc && modal){
+                        modalTitle.textContent = card.dataset.title;
+                        modalDesc.textContent = card.dataset.desc;
+                        modal.classList.add('open');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+
+            if (closeBtn){
+                closeBtn.addEventListener('click', closeModal);
+            }
+            if (modal){
+                modal.addEventListener('click', e=>{ if(e.target === modal) closeModal(); });
+            }
+            function closeModal(){ 
+                if(modal) modal.classList.remove('open'); 
+                document.body.style.overflow = ''; 
+            }
+            window.closeModal = closeModal;
+        })();
+
+        // Intersection observer for smooth animations
+        (function(){
+            const io = new IntersectionObserver((entries)=>{
+                entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in-view'); });
+            }, {threshold:0.15});
+            document.querySelectorAll('.animate').forEach(el=> io.observe(el));
+            document.querySelectorAll('.event-card').forEach(el=> io.observe(el));
+        })();
+
+        // Map initialization
+        var islamIcon = L.icon({ 
+            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png', 
+            shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png', 
+            iconSize: [25, 41], 
+            iconAnchor: [12, 41], 
+            popupAnchor: [1, -34] 
+        });
+
+        var map = L.map('map').setView([21.4, 39.8], 5);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        var lokasi = [
+            {
+                nama: "Mekah – Pusat Awal Islam",
+                koordinat: [21.3891, 39.8579],
+                deskripsi: "Tempat kelahiran Nabi Muhammad ﷺ dan lokasi turunnya wahyu pertama. Awal mula dakwah Islam dimulai di sini."
+            },
+            {
+                nama: "Gua Hira – Turunnya Wahyu Pertama",
+                koordinat: [21.4554, 39.8649],
+                deskripsi: "Lokasi Nabi Muhammad ﷺ menerima wahyu pertama 'Iqra'' dari Malaikat Jibril."
+            },
+            {
+                nama: "Madinah – Kota Hijrah",
+                koordinat: [24.4672, 39.6142],
+                deskripsi: "Tempat hijrahnya Nabi dan berdirinya negara Islam pertama. Menjadi pusat peradaban awal."
+            },
+            {
+                nama: "Badar – Perang Badar",
+                koordinat: [23.7796, 38.7905],
+                deskripsi: "Lokasi perang besar pertama antara Muslim dan Quraisy yang berujung kemenangan besar bagi kaum Muslim."
+            },
+            {
+                nama: "Uhud – Perang Uhud",
+                koordinat: [24.5094, 39.5850],
+                deskripsi: "Lokasi perang Uhud yang memberikan banyak pelajaran tentang disiplin dan ketaatan."
+            },
+            {
+                nama: "Jerusalem – Daerah Isra' Mi'raj & Khilafah Umar",
+                koordinat: [31.7767, 35.2345],
+                deskripsi: "Kota suci yang dibebaskan pada masa Umar bin Khattab dan tempat Isra' Mi'raj."
+            },
+            {
+                nama: "Syam – Wilayah Perluasan Awal",
+                koordinat: [33.5138, 36.2765],
+                deskripsi: "Daerah penting pada masa Khulafaur Rasyidin. Banyak sahabat dimakamkan di sini."
+            },
+            {
+                nama: "Baghdad – Pusat Keemasan Ilmu",
+                koordinat: [33.3128, 44.3615],
+                deskripsi: "Ibu kota Dinasti Abbasiyah dan pusat ilmu dunia: Bayt al-Hikmah, astronomi, kedokteran, filsafat, matematika."
+            },
+            {
+                nama: "Konstantinopel (Istanbul)",
+                koordinat: [37.9838, 23.7275],
+                deskripsi: "Ditaklukkan Sultan Mehmed II pada 1453. Menjadi titik kejayaan Kesultanan Utsmaniyah."
+            },
+            {
+                nama: "Andalusia – Peradaban Islam di Eropa",
+                koordinat: [37.3891, -5.9845],
+                deskripsi: "Tempat lahir filsuf dan ilmuwan seperti Ibn Rushd & Ibn Arabi; pusat ilmu dan toleransi selama ratusan tahun."
+            },
+            {
+                nama: "Kairo – Kota Ulama",
+                koordinat: [30.0444, 31.2357],
+                deskripsi: "Pusat studi Islam (Al-Azhar), perkembangan fikih, tafsir, dan sejarah Islam."
+            }
+        ];
+
+        lokasi.forEach(x => {
+            var marker = L.marker(x.koordinat, {icon: islamIcon}).addTo(map);
+            marker.bindPopup(`<b>${x.nama}</b><br>${x.deskripsi}`);
+            marker.bindTooltip(x.nama, {permanent:false, direction:'top'});
+        });
+
+        // Invalidate map size on window resize
+        window.addEventListener('resize', function(){
+            map.invalidateSize();
+        });
+    </script>
+    <script>
+        // Smooth scroll for navbar links
+        document.querySelectorAll('a[data-anchor]').forEach(a=>{
+            a.addEventListener('click',e=>{
+                const href = a.getAttribute('href');
+                if(!href || href === '#') return;
+                try{
+                    const target = document.querySelector(href);
+                    if(target){
+                        e.preventDefault();
+                        target.scrollIntoView({behavior:'smooth', block:'start'});
+                    }
+                }catch(err){
+                    console.warn('Invalid selector in anchor href:', href, err);
+                }
+            });
+        });
+
+        // IntersectionObserver for scroll + slide animations
+        const observer=new IntersectionObserver((entries)=>{
+            entries.forEach(e=>{
+                if(e.isIntersecting){e.target.classList.add('in-view');}
+            });
+        },{threshold:0.2});
+
+        document.querySelectorAll('.animate, .slide').forEach(el=>observer.observe(el));
+        document.querySelectorAll('.event-card').forEach(el=>el.classList.add('slide'));
+    </script>
+</body>
+</html>
